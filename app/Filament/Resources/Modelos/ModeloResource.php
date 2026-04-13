@@ -9,7 +9,7 @@ use App\Filament\Resources\Modelos\Schemas\ModeloForm;
 use App\Filament\Resources\Modelos\Tables\ModelosTable;
 use App\Models\Modelo;
 use BackedEnum;
-use Filament\Resources\Resource;
+use Filament\Resources\Resource; 
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
