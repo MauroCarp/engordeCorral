@@ -30,13 +30,13 @@ return new class extends Migration
             $table->decimal('eficiencia_conversion', 5, 2)->comment('Eficiencia conversión (kg MS/kg ganado)');
 
             // Cabezas por jaula
-            $table->integer('cabezas_jaula_compra')->comment('Cabezas/jaula (referencia compra)');
-            $table->integer('cabezas_jaula_venta')->comment('Cabezas/jaula (referencia venta)');
+            $table->integer('cabezas_jaula_terneros')->comment('Cabezas/jaula (Terneros/as)');
+            $table->integer('cabezas_jaula_gordos')->comment('Cabezas/jaula (Gordos/as)');
 
             // Fletes y comercialización
-            $table->decimal('flete_compra_km', 10, 2)->comment('Flete compra - distancia (km)');
-            $table->decimal('flete_compra_precio', 10, 2)->comment('Flete compra - precio total ($)');
-            $table->decimal('flete_venta', 10, 2)->comment('Flete venta ($/cabeza)');
+            $table->decimal('flete_compra_km', 10, 2)->comment('Flete compra (km)');
+            $table->decimal('flete_venta_km', 10, 2)->comment('Flete venta (km)');
+            $table->decimal('flete_compra_venta_precio', 10, 2)->comment('Flete compra-venta - precio ($/km)');
             $table->decimal('gastos_compra', 5, 4)->comment('Gastos de compra (ej: 0.03 = 3%)');
             $table->decimal('gastos_venta', 5, 4)->comment('Gastos de venta (ej: 0.03 = 3%)');
 
