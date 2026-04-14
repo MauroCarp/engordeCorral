@@ -18,136 +18,44 @@ class ModeloForm
                     ->maxLength(191)
                     ->columnSpanFull(),
 
-                Section::make('Precios')
+                Section::make('Mercado')
                     ->columns(3)
                     ->schema([
                         TextInput::make('precio_venta_faena')
                             ->label('Precio venta a faena ($/kg)')
                             ->numeric()
                             ->required()
-                            ->default(5200)
-                            ->step(0.01),
+                            ->default(0)
+                            ->step(0.1),
 
                         TextInput::make('precio_compra_ternero')
                             ->label('Precio compra terneras/os destete ($/kg)')
                             ->numeric()
                             ->required()
-                            ->default(6500)
-                            ->step(0.01),
-
-                        TextInput::make('precio_alimento_balanceado')
-                            ->label('Precio tal cual alimento balanceado ($/kg)')
-                            ->numeric()
-                            ->required()
-                            ->default(196)
-                            ->step(0.01),
-                    ]),
-
-                Section::make('Parámetros productivos')
-                    ->columns(3)
-                    ->schema([
+                            ->default(0)
+                            ->step(0.1),
                         TextInput::make('peso_neto_entrada')
                             ->label('Peso neto de entrada (kg)')
                             ->numeric()
                             ->required()
-                            ->default(160)
+                            ->default(0)
                             ->step(0.01),
-
                         TextInput::make('peso_neto_venta')
                             ->label('Peso neto venta (kg)')
                             ->numeric()
                             ->required()
-                            ->default(380)
-                            ->step(0.01),
-
-                        TextInput::make('mortandad')
-                            ->label('Mortandad (ej: 0.01 = 1%)')
-                            ->numeric()
-                            ->required()
-                            ->default(0.01)
-                            ->step(0.0001),
-
-                        TextInput::make('consumo_promedio_ms')
-                            ->label('Consumo promedio MS en terminación (% PV)')
-                            ->numeric()
-                            ->required()
-                            ->default(0.03)
-                            ->step(0.0001),
-
-                        TextInput::make('eficiencia_conversion')
-                            ->label('Eficiencia conversión (kg MS/kg ganado)')
-                            ->numeric()
-                            ->required()
-                            ->default(7)
+                            ->default(0)
                             ->step(0.01),
                     ]),
-
-                Section::make('Cabezas por jaula')
-                    ->columns(2)
-                    ->schema([
-                        TextInput::make('cabezas_jaula_compra')
-                            ->label('Cabezas/jaula (referencia compra)')
-                            ->numeric()
-                            ->integer()
-                            ->required()
-                            ->default(65),
-
-                        TextInput::make('cabezas_jaula_venta')
-                            ->label('Cabezas/jaula (referencia venta)')
-                            ->numeric()
-                            ->integer()
-                            ->required()
-                            ->default(50),
-                    ]),
-
-                Section::make('Fletes y comercialización')
-                    ->columns(3)
-                    ->schema([
-                        TextInput::make('flete_compra_km')
-                            ->label('Flete compra - distancia (km)')
-                            ->numeric()
-                            ->required()
-                            ->default(3737)
-                            ->step(0.01),
-
-                        TextInput::make('flete_compra_precio')
-                            ->label('Flete compra - precio total ($)')
-                            ->numeric()
-                            ->required()
-                            ->default(600)
-                            ->step(0.01),
-
-                        TextInput::make('flete_venta')
-                            ->label('Flete venta ($/cabeza)')
-                            ->numeric()
-                            ->required()
-                            ->default(70)
-                            ->step(0.01),
-
-                        TextInput::make('gastos_compra')
-                            ->label('Gastos de compra (ej: 0.03 = 3%)')
-                            ->numeric()
-                            ->required()
-                            ->default(0.03)
-                            ->step(0.0001),
-
-                        TextInput::make('gastos_venta')
-                            ->label('Gastos de venta (ej: 0.03 = 3%)')
-                            ->numeric()
-                            ->required()
-                            ->default(0.03)
-                            ->step(0.0001),
-                    ]),
-
-                Section::make('Costo financiero')
+                Section::make('Financiero')
                     ->columns(3)
                     ->schema([
                         TextInput::make('tasa_anual')
-                            ->label('Tasa anual (ej: 0.25 = 25%)')
+                            ->label('Tasa anual (%)')
                             ->numeric()
                             ->required()
-                            ->default(0.25)
-                            ->step(0.0001),
+                            ->default(0)
+                            ->step(1),
 
                         TextInput::make('plazo_compra_hacienda')
                             ->label('Plazo compra hacienda (días)')
@@ -170,6 +78,92 @@ class ModeloForm
                             ->required()
                             ->default(60),
                     ]),
+
+
+                Section::make('Comercialización')
+                    ->columns(2)
+                    ->schema([
+                        TextInput::make('cabezas_jaula_terneros')
+                            ->label('Cabezas/jaula (Terneros/as)')
+                            ->numeric()
+                            ->integer()
+                            ->required()
+                            ->default(0),
+
+                        TextInput::make('cabezas_jaula_gordos')
+                            ->label('Cabezas/jaula (Gordos/as)')
+                            ->numeric()
+                            ->integer()
+                            ->required()
+                            ->default(0),
+                        TextInput::make('flete_compra_km')
+                            ->label('Flete compra (km)')
+                            ->numeric()
+                            ->required()
+                            ->default(0)
+                            ->step(1),
+                        TextInput::make('flete_venta_km')
+                            ->label('Flete venta (km)')
+                            ->numeric()
+                            ->required()
+                            ->default(0)
+                            ->step(1),
+                        TextInput::make('flete_compra_venta_precio')
+                            ->label('Flete compra-venta - precio ($/km)')
+                            ->numeric()
+                            ->required()
+                            ->default(0)
+                            ->step(1),
+                        TextInput::make('gastos_compra')
+                            ->label('Gastos de compra (%)')
+                            ->numeric()
+                            ->required()
+                            ->default(0)
+                            ->step(1),
+                        TextInput::make('gastos_venta')
+                            ->label('Gastos de venta (%)')
+                            ->numeric()
+                            ->required()
+                            ->default(0)
+                            ->step(1),
+                    ]),
+                Section::make('')
+                    ->columns(1)
+                    ->schema([
+                        Section::make('Sanidad')
+                            ->schema([
+                                TextInput::make('mortandad')
+                                    ->label('Mortandad (1%)')
+                                    ->numeric()
+                                    ->required()
+                                    ->default(0)
+                                    ->step(0.1),
+                            ]),
+
+                        Section::make('Nutrición')
+                            ->columns(3)
+                            ->schema([
+                                TextInput::make('precio_alimento_balanceado')
+                                    ->label('Precio tal cual alimento balanceado ($/kg)')
+                                    ->numeric()
+                                    ->required()
+                                    ->default(0)
+                                    ->step(0.1),
+                                TextInput::make('consumo_promedio_ms')
+                                    ->label('Consumo promedio MS en terminación (% PV)')
+                                    ->numeric()
+                                    ->required()
+                                    ->default(0)
+                                    ->step(0.1),
+                                TextInput::make('eficiencia_conversion')
+                                    ->label('Eficiencia conversión (kg MS/kg carne)')
+                                    ->numeric()
+                                    ->required()
+                                    ->default(1)
+                                    ->step(0.1),
+                            ]),
+                    ]),
+
             ]);
     }
 }
