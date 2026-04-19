@@ -6,6 +6,7 @@ use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\NavigationItem;
 use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
@@ -34,6 +35,12 @@ class NutricionPanelProvider extends PanelProvider
             ->discoverPages(in: app_path('Filament/Nutricion/Pages'), for: 'App\Filament\Nutricion\Pages')
             ->pages([
                 Dashboard::class,
+            ])
+            ->navigationItems([
+                NavigationItem::make('Principal')
+                    ->url('/admin')
+                    ->icon('heroicon-o-cog')
+                    ->sort(1),
             ])
             ->discoverWidgets(in: app_path('Filament/Nutricion/Widgets'), for: 'App\Filament\Nutricion\Widgets')
             ->widgets([
