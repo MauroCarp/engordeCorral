@@ -64,7 +64,7 @@ class SanidadEstructuraForm
                     ->inputMode('decimal')
                     ->step(0.01)
                     ->prefix('$')
-                    ->label('Costo por Mes'),
+                    ->label('$/Cab'),
             ]);
     }
 }

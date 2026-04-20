@@ -36,6 +36,8 @@ class IndexSanidadEstructuras extends Page
                 ->successNotificationTitle('Registro creado exitosamente')
                 ->after(function () {
                     $this->dispatch('$refresh');
+                    $this->dispatch('refreshSanidadWidget');
+                    $this->dispatch('refreshEstructuraWidget');
                 }),
         ];
     }
