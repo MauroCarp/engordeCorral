@@ -48,6 +48,10 @@ class AdminPanelProvider extends PanelProvider
                     ->url('/nutricion')
                     ->icon('heroicon-o-cog')
                     ->sort(1),
+                NavigationItem::make('Sanidad Estructura')
+                    ->url('/admin/sanidad-estructuras')
+                    ->icon('heroicon-o-shield-check')
+                    ->sort(2),
             ])
             ->middleware([
                 EncryptCookies::class,

@@ -2,8 +2,10 @@
 
 namespace App\Filament\Resources\SanidadEstructuras\Schemas;
 
+use App\Models\MotivoSanidadEstructura;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Textarea;
+use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
 
 class SanidadEstructuraForm
@@ -12,15 +14,49 @@ class SanidadEstructuraForm
     {
         return $schema
             ->components([
-                TextInput::make('tipo')
+                Select::make('tipo')
                     ->required()
-                    ->maxLength(255)
-                    ->label('Tipo'),
+                    ->options([
+                        'sanidad' => 'Sanidad',
+                        'estructura' => 'Estructura',
+                    ])
+                    ->label('Tipo')
+                    ->live(),
 
-                Textarea::make('motivo')
+                Select::make('motivo')
                     ->required()
-                    ->rows(3)
-                    ->label('Motivo'),
+                    ->options(function (Get $get) {
+                        $tipo = $get('tipo');
+                        if (!$tipo) {
+                            return [];
+                        }
+                        return MotivoSanidadEstructura::where('tipo', $tipo)
+                            ->pluck('motivo', 'motivo')
+                            ->toArray();
+                    })
+                    ->searchable()
+                    ->label('Motivo')
+                    ->placeholder('Selecciona un tipo primero')
+                    ->createOptionUsing(function (array $data, Get $get) {
+                        $tipo = $get('tipo');
+                        if (!$tipo) {
+                            return null;
+                        }
+                        
+                        $motivo = MotivoSanidadEstructura::create([
+                            'motivo' => $data['motivo'],
+                            'tipo' => $tipo,
+                        ]);
+                        
+                        return $motivo->motivo;
+                    })
+                    ->createOptionForm([
+                        TextInput::make('motivo')
+                            ->label('Nuevo Motivo')
+                            ->required()
+                            ->maxLength(255),
+                    ])
+                    ->createOptionModalHeading('Agregar Nuevo Motivo'),
 
                 TextInput::make('costo_mes')
                     ->required()
