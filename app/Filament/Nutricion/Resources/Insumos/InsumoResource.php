@@ -18,9 +18,11 @@ class InsumoResource extends Resource
 {
     protected static ?string $model = Insumo::class;
 
+    protected static bool $shouldRegisterNavigation = false;
+
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
-    protected static ?string $recordTitleAttribute = 'nombre';
+    protected static ?string $recordTitleAttribute = 'insumo';
 
     public static function form(Schema $schema): Schema
     {
