@@ -64,7 +64,8 @@ class SanidadEstructuraForm
                     ->inputMode('decimal')
                     ->step(0.01)
                     ->prefix('$')
-                    ->label('$/Cab'),
+                    ->label(fn (Get $get) => $get('tipo') === 'estructura' ? '$/Mes' : '$/Cab')
+                    ->live(),
             ]);
     }
 }
