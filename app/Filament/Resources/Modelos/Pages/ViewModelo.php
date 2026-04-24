@@ -11,8 +11,6 @@ class ViewModelo extends ViewRecord
 {
     protected static string $resource = ModeloResource::class;
 
-    // protected static string $view = 'filament.resources.modelos.pages.view-modelo';
-
     protected function getHeaderActions(): array
     {
         return [
