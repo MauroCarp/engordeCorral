@@ -13,9 +13,9 @@
         --c-green-dim:   rgba(34,197,94,.10);
         --c-amber:       #f59e0b;
         --c-amber-dim:   rgba(245,158,11,.10);
-        --c-muted:       #64748b;
+        --c-muted:       #ffffff;
         --c-text:        #e2e8f0;
-        --c-text-soft:   #94a3b8;
+        --c-text-soft:   #ffffff;
         --c-heading:     #f8fafc;
 
         --r:  6px;
@@ -26,6 +26,50 @@
         color: var(--c-text);
         padding: 2rem;
         border-radius: var(--r2);
+    }
+    .financial-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 1rem;
+    }
+
+    .financial-table th,
+    .financial-table td {
+        border: 1px solid var(--c-border);
+        padding: 0.75rem;
+        text-align: center;
+        font-size: 0.8rem;
+    }
+
+    .financial-table th {
+        background-color: var(--c-surface-2);
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .financial-table td:first-child {
+        text-align: left;
+        font-weight: 600;
+    }
+
+    .financial-table .highlight {
+        background-color: var(--c-amber-dim);
+        color: var(--c-amber);
+        font-weight: bold;
+    }
+
+    .financial-table .total-row td {
+        border-top: 2px solid var(--c-heading);
+        font-weight: bold;
+    }
+
+    .financial-table .total-label {
+        text-align: right;
+        padding-right: 1rem;
+    }
+    .rp-value-amber {
+        color: #f59e0b;
     }
 
     /* ── Header ─────────────────────────────────────────── */
@@ -258,11 +302,9 @@
     {{-- ── Header ── --}}
     <div class="rp-header">
         <div class="rp-title-block">
-            <div class="rp-eyebrow">Reporte de modelo</div>
-            <h2 class="rp-title">Parámetros del Sistema</h2>
-            <p class="rp-subtitle">Último modelo registrado · vista consolidada</p>
+            <div class="rp-eyebrow">Engorde a Corral {{$modelo->nombre}}</div>
         </div>
-        @if($modelo)
+        {{-- @if($modelo)
         <div class="rp-meta">
             <span class="rp-badge">
                 <span class="rp-badge-dot"></span>
@@ -272,7 +314,7 @@
             <span class="rp-date">{{ $modelo->created_at->format('d/m/Y — H:i') }}</span>
             @endif
         </div>
-        @endif
+        @endif --}}
     </div>
 
     @if(!$modelo)
@@ -335,7 +377,7 @@
         </div>
 
         {{-- Financiero --}}
-        <div class="rp-section">
+        <div class="rp-section rp-grid-full">
             <div class="rp-section-header">
                 <span class="rp-section-icon icon-green">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -343,37 +385,52 @@
                             d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/>
                     </svg>
                 </span>
-                <span class="rp-section-title">Financiero</span>
+                <span class="rp-section-title">Costo Financiero</span>
             </div>
-            <div class="rp-section-body">
-                <div class="rp-field">
-                    <span class="rp-label">Tasa anual</span>
-                    <span class="rp-value rp-value-green">
-                        {{ number_format($modelo->tasa_anual, 0, ',', '.') }}
-                        <span class="rp-unit">%</span>
+            <div class="rp-section-body" style="grid-template-columns: 1fr">
+                <div style="display: flex; justify-content: flex-end; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                    <span class="rp-label" style="font-size: 0.8rem;">Tasa anual</span>
+                    <span class="rp-value rp-value-amber highlight" style="padding: 0.5rem 1rem; border-radius: var(--r);">
+                        {{ number_format($modelo->tasa_anual, 2, ',', '.') }}%
                     </span>
                 </div>
-                <div class="rp-field">
-                    <span class="rp-label">Plazo compra hacienda</span>
-                    <span class="rp-value">
-                        {{ number_format($modelo->plazo_compra_hacienda, 0) }}
-                        <span class="rp-unit">días</span>
-                    </span>
-                </div>
-                <div class="rp-field">
-                    <span class="rp-label">Plazo venta hacienda</span>
-                    <span class="rp-value">
-                        {{ number_format($modelo->plazo_venta_hacienda, 0) }}
-                        <span class="rp-unit">días</span>
-                    </span>
-                </div>
-                <div class="rp-field">
-                    <span class="rp-label">Días financiamiento alimento</span>
-                    <span class="rp-value">
-                        {{ number_format($modelo->dias_financiamiento_alimento, 0) }}
-                        <span class="rp-unit">días</span>
-                    </span>
-                </div>
+
+                <table class="financial-table">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Plazo compra</th>
+                            <th>Plazo venta</th>
+                            <th>Días de financiamiento</th>
+                            <th>Tasa a aplicar</th>
+                            <th>Costo Financiero</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Hacienda</td>
+                            <td class="highlight">{{ $modelo->plazo_compra_hacienda }} días</td>
+                            <td class="highlight">{{ $modelo->plazo_venta_hacienda }} días</td>
+                            <td class="highlight">170 días</td>
+                            <td>12%</td>
+                            <td>$ 128.838,85</td>
+                        </tr>
+                        <tr>
+                            <td>Alimento</td>
+                            <td>(pago AB cada 15 días)</td>
+                            <td></td>
+                            <td class="highlight">60 días</td>
+                            <td>4%</td>
+                            <td>$ 17.809,15</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr class="total-row">
+                            <td colspan="5" class="total-label">Costo financiero total</td>
+                            <td>$ 146.648,00</td>
+                        </tr>
+                    </tfoot>
+                </table>
             </div>
         </div>
 
@@ -388,65 +445,35 @@
                 </span>
                 <span class="rp-section-title">Comercialización</span>
             </div>
-            <div class="rp-section-body" style="grid-template-columns: repeat(4, 1fr)">
-                <div class="rp-field">
-                    <span class="rp-label">Cabezas/jaula terneros</span>
-                    <span class="rp-value">
-                        {{ number_format($modelo->cabezas_jaula_terneros, 0) }}
-                        <span class="rp-unit">terneros/as</span>
-                    </span>
-                </div>
-                <div class="rp-field">
-                    <span class="rp-label">Cabezas/jaula gordos</span>
-                    <span class="rp-value">
-                        {{ number_format($modelo->cabezas_jaula_gordos, 0) }}
-                        <span class="rp-unit">gordos/as</span>
-                    </span>
-                </div>
-                <div class="rp-field">
-                    <span class="rp-label">Flete compra</span>
-                    <span class="rp-value">
-                        {{ number_format($modelo->flete_compra_km, 0, ',', '.') }}
-                        <span class="rp-unit">km</span>
-                    </span>
-                </div>
-                <div class="rp-field">
-                    <span class="rp-label">Flete venta</span>
-                    <span class="rp-value">
-                        {{ number_format($modelo->flete_venta_km, 0, ',', '.') }}
-                        <span class="rp-unit">km</span>
-                    </span>
-                </div>
-                <div class="rp-field">
-                    <span class="rp-label">Flete compra-venta precio</span>
-                    <span class="rp-value rp-value-amber">
-                        {{ number_format($modelo->flete_compra_venta_precio, 0, ',', '.') }}
-                        <span class="rp-unit">$/Kg</span>
-                    </span>
-                </div>
-                <div class="rp-field">
-                    <span class="rp-label">Gastos de compra</span>
-                    <span class="rp-value">
-                        {{ number_format($modelo->gastos_compra, 0, ',', '.') }}
-                        <span class="rp-unit">%</span>
-                    </span>
-                </div>
-                <div class="rp-field">
-                    <span class="rp-label">Gastos de venta</span>
-                    <span class="rp-value">
-                        {{ number_format($modelo->gastos_venta, 0, ',', '.') }}
-                        <span class="rp-unit">%</span>
-                    </span>
-                </div>
+            <div class="rp-section-body" style="grid-template-columns: 1fr">
+                <table class="financial-table">
+                    <thead>
+                        <tr>
+                            <th>Cabezas/jaula</th>
+                            <th colspan="4">{{ $modelo->cabezas_jaula_terneros }} terneras/os - {{ $modelo->cabezas_jaula_gordos }} gordos</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Flete compra</td>
+                            <td rowspan="2">3.737,00 $/km</td>
+                            <td>(600 km)</td>
+                            <td>$/kg 215,596</td>
+                            <td>34.495,38 $/cab.</td>
+                        </tr>
+                        <tr>
+                            <td>Flete venta</td>
+                            <td>(70 km)</td>
+                            <td>$/kg 13,768</td>
+                            <td>5.231,80 $/cab.</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
 
-        {{-- Sanidad + Nutrición side by side (full width) --}}
-        <div class="rp-grid-full">
-            <div class="rp-nested">
-
-                {{-- Sanidad --}}
-                <div class="rp-section">
+                        {{-- Sanidad --}}
+                {{-- <div class="rp-section">
                     <div class="rp-section-header">
                         <span class="rp-section-icon icon-rose">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -466,45 +493,132 @@
                         </div>
                     </div>
                 </div>
-
+                 --}}
+        {{-- Sanidad + Nutrición side by side (full width) --}}
                 {{-- Nutrición --}}
-                <div class="rp-section">
-                    <div class="rp-section-header">
-                        <span class="rp-section-icon icon-violet">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/>
-                            </svg>
-                        </span>
-                        <span class="rp-section-title">Nutrición</span>
+        <div class="rp-section rp-grid-full">
+            <div class="rp-section-header">
+                <span class="rp-section-icon icon-violet">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/>
+                    </svg>
+                </span>
+                <span class="rp-section-title">Nutrición</span>
+            </div>
+            <div class="rp-section-body" style="grid-template-columns: repeat(1, 1fr)">
+                {{-- <div class="rp-field" > --}}
+                    <div class="rp-section">
+                        <div class="rp-section-header">
+                            <span class="rp-section-icon icon-violet">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/>
+                                </svg>
+                            </span>
+                            <span class="rp-section-title">Precio TAL CUAL alimento balanceado</span>
+                        </div>
+                        <div class="rp-section-body" style="grid-template-columns: repeat(3, 1fr)">
+                            <div class="rp-field">
+                                <span class="rp-value">
+                                    {{ number_format($modelo->precio_alimento_balanceado, 1, ',', '.') }}
+                                    <span class="rp-unit">% de Materia Seca</span>
+                                </span>
+                            </div>
+                            <div class="rp-field">
+                                <span class="rp-value">
+                                    {{ number_format($modelo->eficiencia_conversion, 1, ',', '.') }}
+                                    <span class="rp-unit">$/Kg(MS)</span>
+                                </span>
+                            </div>
+                            <div class="rp-field">
+                                <span class="rp-value">
+                                    {{ number_format($modelo->eficiencia_conversion, 1, ',', '.') }}
+                                    <span class="rp-unit">$/Kg</span>
+                                </span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="rp-section-body cols-3">
-                        <div class="rp-field">
-                            <span class="rp-label">Precio alimento balanceado</span>
-                            <span class="rp-value rp-value-accent">
-                                {{ number_format($modelo->precio_alimento_balanceado, 1, ',', '.') }}
-                                <span class="rp-unit">$/Kg</span>
+                    <div class="rp-section">
+                        <div class="rp-section-header">
+                            <span class="rp-section-icon icon-violet">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/>
+                                </svg>
                             </span>
+                            <span class="rp-section-title">Consumo promedio MS en terminación</span>
                         </div>
-                        <div class="rp-field">
-                            <span class="rp-label">Consumo promedio MS terminación</span>
-                            <span class="rp-value">
-                                {{ number_format($modelo->consumo_promedio_ms, 1, ',', '.') }}
-                                <span class="rp-unit">% PV</span>
-                            </span>
-                        </div>
-                        <div class="rp-field">
-                            <span class="rp-label">Eficiencia conversión</span>
-                            <span class="rp-value">
-                                {{ number_format($modelo->eficiencia_conversion, 1, ',', '.') }}
-                                <span class="rp-unit">kg MS/kg carne</span>
-                            </span>
+                        <div class="rp-section-body" style="grid-template-columns: repeat(4, 1fr)">
+                            <div class="rp-field">
+                                <span class="rp-value">
+                                    {{ number_format($modelo->consumo_promedio_ms, 1, ',', '.') }}
+                                    <span class="rp-unit">% PV</span>
+                                </span>
+                            </div>
+                            <div class="rp-field">
+                                <span class="rp-value">
+                                    {{ number_format($modelo->eficiencia_conversion, 1, ',', '.') }}
+                                    <span class="rp-unit">Kg MS/Cab dia</span>
+                                </span>
+                            </div>
+                            <div class="rp-field">
+                                <span class="rp-value">
+                                    {{ number_format($modelo->eficiencia_conversion, 1, ',', '.') }}
+                                    <span class="rp-unit">Kg MV/Cab dia</span>
+                                </span>
+                            </div>
+                            <div class="rp-field">
+                                <span class="rp-value">
+                                    {{ number_format($modelo->eficiencia_conversion, 1, ',', '.') }}
+                                    <span class="rp-unit">$/dia</span>
+                                </span>
+                            </div>
                         </div>
                     </div>
-                </div>
+                    <div class="rp-section">
+                        <div class="rp-section-header">
+                            <span class="rp-section-icon icon-violet">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/>
+                                </svg>
+                            </span>
+                            <span class="rp-section-title">Eficiencia conversión y Ciclo terminación</span>
+                        </div>
+                        <div class="rp-section-body" style="grid-template-columns: repeat(4, 1fr)">
+                            <div class="rp-field">
+                                <span class="rp-value">
+                                    {{ number_format($modelo->consumo_promedio_ms, 1, ',', '.') }}
+                                    <span class="rp-unit">Kg MS/Kg carne</span>
+                                </span>
+                            </div>
+                            <div class="rp-field">
+                                <span class="rp-value">
+                                    {{ number_format($modelo->eficiencia_conversion, 1, ',', '.') }}
+                                    <span class="rp-unit">Kg ADPV</span>
+                                </span>
+                            </div>
+                            <div class="rp-field">
+                                <span class="rp-value">
+                                    {{ number_format($modelo->eficiencia_conversion, 0, ',', '.') }}
+                                    <span class="rp-unit">Meses</span>
+                                </span>
+                            </div>
+                            <div class="rp-field">
+                                <span class="rp-value">
+                                    {{ number_format($modelo->eficiencia_conversion, 0, ',', '.') }}
+                                    <span class="rp-unit">Dias</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                {{-- </div> --}}
 
             </div>
+
         </div>
+
 
     </div>{{-- /rp-grid --}}
     @endif
