@@ -43,7 +43,9 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->widgets([
-                // \App\Filament\Widgets\ModeloDashboardWidget::class,
+                \App\Filament\Widgets\ModeloReporteWidget::class,
+                \App\Filament\Widgets\ImpactoCostosWidget::class,
+                \App\Filament\Widgets\CostoEngordeWidget::class,
             ])
             ->navigationItems([
                 NavigationItem::make('Nutrición')
