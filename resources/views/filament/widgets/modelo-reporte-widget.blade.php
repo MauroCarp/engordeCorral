@@ -334,7 +334,7 @@
     <div class="rp-grid">
 
         {{-- Mercado --}}
-        <div class="rp-section">
+        <div class="rp-section rp-grid-full">
             <div class="rp-section-header">
                 <span class="rp-section-icon icon-blue">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -344,35 +344,145 @@
                 </span>
                 <span class="rp-section-title">Mercado</span>
             </div>
-            <div class="rp-section-body">
-                <div class="rp-field">
-                    <span class="rp-label">Precio venta a faena</span>
-                    <span class="rp-value rp-value-accent">
-                        {{ number_format($modelo->precio_venta_faena, 1, ',', '.') }}
-                        <span class="rp-unit">$/Kg</span>
-                    </span>
-                </div>
-                <div class="rp-field">
-                    <span class="rp-label">Precio compra terneras/os destete</span>
-                    <span class="rp-value rp-value-accent">
-                        {{ number_format($modelo->precio_compra_ternero, 1, ',', '.') }}
-                        <span class="rp-unit">$/Kg</span>
-                    </span>
-                </div>
-                <div class="rp-field">
-                    <span class="rp-label">Peso neto de entrada</span>
-                    <span class="rp-value">
-                        {{ number_format($modelo->peso_neto_entrada, 2, ',', '.') }}
-                        <span class="rp-unit">Kg</span>
-                    </span>
-                </div>
-                <div class="rp-field">
-                    <span class="rp-label">Peso neto venta</span>
-                    <span class="rp-value">
-                        {{ number_format($modelo->peso_neto_venta, 2, ',', '.') }}
-                        <span class="rp-unit">Kg</span>
-                    </span>
-                </div>
+            <div class="rp-section-body" style="display:block">
+
+                <table class="financial-table">
+                    <tbody>
+                        <tr>
+                            <td>Precio venta a faena</td>
+                            <td>{{ number_format($modelo->precio_venta_faena, 1, ',', '.') }}<span class="rp-unit">$/Kg</span></td>
+                        </tr>
+                        <tr>
+                            <td>Precio compra terneras/os destete</td>
+                            <td>
+                                <span class="rp-value rp-value-accent">
+                                    {{ number_format($modelo->precio_compra_ternero, 1, ',', '.') }}
+                                    <span class="rp-unit">$/Kg</span>
+                                </span>
+                            </td>
+                        </tr>
+                            <td>Peso neto de entrada</td>
+                            <td>
+                                <span class="rp-value rp-value-accent">
+                                    {{ number_format($modelo->peso_neto_entrada, 1, ',', '.') }}
+                                    <span class="rp-unit">$/Kg</span>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Peso neto venta</td>
+                            <td>
+                                <span class="rp-value">
+                                    {{ number_format($modelo->peso_neto_venta, 2, ',', '.') }}
+                                    <span class="rp-unit">Kg</span>
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+           {{-- Comercialización (full width) --}}
+        <div class="rp-section rp-grid-full">
+            <div class="rp-section-header">
+                <span class="rp-section-icon icon-amber">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/>
+                    </svg>
+                </span>
+                <span class="rp-section-title">Comercialización</span>
+            </div>
+            <div class="rp-section-body" style="grid-template-columns: 1fr">
+                <table class="financial-table">
+                    <thead>
+                        <tr>
+                            <th>Cabezas/jaula</th>
+                            <th colspan="4">{{ $modelo->cabezas_jaula_terneros }} terneras/os - {{ $modelo->cabezas_jaula_gordos }} gordos</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Flete compra</td>
+                            <td rowspan="2">3.737,00 $/km</td>
+                            <td>(600 km)</td>
+                            <td>$/kg 215,596</td>
+                            <td>34.495,38 $/cab.</td>
+                        </tr>
+                        <tr>
+                            <td>Flete venta</td>
+                            <td>(70 km)</td>
+                            <td>$/kg 13,768</td>
+                            <td>5.231,80 $/cab.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        {{-- COSTO --}}
+        <div class="rp-section rp-grid-full">
+            <div class="rp-section-header">
+                <span class="rp-section-icon icon-blue">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                    </svg>
+                </span>
+                <span class="rp-section-title">COSTOS</span>
+            </div>
+            <div class="rp-section-body" style="display:block">
+
+                <table class="financial-table">
+                    <tbody>
+                        <tr>
+                            <td>Costo Amortización / Estructura/Personal *</td>
+                            <td style="text-align: right;">311,48 $/día/cab</td>
+                            <td style="text-align: right;">59.515 $/cab.</td>
+                        </tr>
+                        <tr>
+                            <td>Costo Sanidad e identificación</td>
+                            <td style="text-align: right;">$/cab 7.074,00</td>
+                            <td style="text-align: right;">7.145 $/cab.</td>
+                        </tr>
+                        <tr>
+                            <td>Costo Alimentación</td>
+                            <td style="text-align: right;">2.268,0 $/día</td>
+                            <td style="text-align: right;">433.356,0 $/cab.</td>
+                        </tr>
+                        <tr>
+                            <td>Costos totales Engorde</td>
+                            <td style="text-align: right;">2.630,0 $/día</td>
+                            <td style="text-align: right;">500.015,6 $/cab.</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">Costo promedio/kg ganado</td>
+                            <td style="text-align: right;">2.272,80 $/kg</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">Valor ternero invernada</td>
+                            <td style="text-align: right;">$ 1.040.000,0</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">Costos totales Engorde</td>
+                            <td style="text-align: right;">$ 500.015,6</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">Gastos de comercialización</td>
+                            <td style="text-align: right;">$ 130.800,0</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">Valor ternero gordo</td>
+                            <td style="text-align: right;">$ 1.956.240,0</td>
+                        </tr>
+                        <tr class="total-row">
+                            <td colspan="2" class="total-label">Utilidad antes de impuestos nacionales y provinciales SIN costo financiero</td>
+                            <td class="highlight" style="background-color: #28a745; color: white; text-align: right;">$ 285.424,40</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
             </div>
         </div>
 
@@ -388,14 +498,14 @@
                 <span class="rp-section-title">Costo Financiero</span>
             </div>
             <div class="rp-section-body" style="grid-template-columns: 1fr">
-                <div style="display: flex; justify-content: flex-end; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                <div style="display: flex; justify-content: flex-end; align-items: center; gap: 1rem;">
                     <span class="rp-label" style="font-size: 0.8rem;">Tasa anual</span>
                     <span class="rp-value rp-value-amber highlight" style="padding: 0.5rem 1rem; border-radius: var(--r);">
                         {{ number_format($modelo->tasa_anual, 2, ',', '.') }}%
                     </span>
                 </div>
 
-                <table class="financial-table">
+                <table class="financial-table" style="margin-top: 0;">
                     <thead>
                         <tr>
                             <th></th>
@@ -434,44 +544,7 @@
             </div>
         </div>
 
-        {{-- Comercialización (full width) --}}
-        <div class="rp-section rp-grid-full">
-            <div class="rp-section-header">
-                <span class="rp-section-icon icon-amber">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/>
-                    </svg>
-                </span>
-                <span class="rp-section-title">Comercialización</span>
-            </div>
-            <div class="rp-section-body" style="grid-template-columns: 1fr">
-                <table class="financial-table">
-                    <thead>
-                        <tr>
-                            <th>Cabezas/jaula</th>
-                            <th colspan="4">{{ $modelo->cabezas_jaula_terneros }} terneras/os - {{ $modelo->cabezas_jaula_gordos }} gordos</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Flete compra</td>
-                            <td rowspan="2">3.737,00 $/km</td>
-                            <td>(600 km)</td>
-                            <td>$/kg 215,596</td>
-                            <td>34.495,38 $/cab.</td>
-                        </tr>
-                        <tr>
-                            <td>Flete venta</td>
-                            <td>(70 km)</td>
-                            <td>$/kg 13,768</td>
-                            <td>5.231,80 $/cab.</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
+     
                         {{-- Sanidad --}}
                 {{-- <div class="rp-section">
                     <div class="rp-section-header">

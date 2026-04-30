@@ -9,7 +9,7 @@ class ModeloReporteWidget extends Widget
 {
     protected string $view = 'filament.widgets.modelo-reporte-widget';
 
-    protected int | string | array $columnSpan = 'full';
+    protected int | string | array $columnSpan = 'half';
 
     protected static ?int $sort = 1;
 
