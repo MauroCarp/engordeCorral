@@ -54,6 +54,9 @@
             .impact-table tbody tr:last-child {
                 border-bottom: 2px solid #ffffff;
             }
+            .impact-table td:first-child, .impact-table th:first-child {
+                font-weight: bold;
+            }
         </style>
         <div class="impacto-root">
             <table class="impact-table">
