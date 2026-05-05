@@ -12,14 +12,14 @@
             }
             .costo-engorde-table th {
                 font-weight: bold;
-                color: #008080;
+                color: #ffffff;
             }
             .costo-engorde-table .header-row th {
-                border-bottom: 2px solid black;
+                border-bottom: 1px solid #e5e7eb;
             }
             .costo-engorde-table .subtotal-row td {
                 font-weight: bold;
-                border-top: 2px solid black;
+                border-top: 3px solid #c2c2c2;
             }
             .costo-engorde-table td:not(:first-child), .costo-engorde-table th:not(:first-child) {
                 text-align: right;
@@ -42,13 +42,13 @@
                     <td></td>
                 </tr>
                 <tr>
-                    <td>sanidad</td>
+                    <td>Sanidad</td>
                     <td>7.145 $/cab.</td>
                     <td>1,13%</td>
                     <td>3,62%</td>
                 </tr>
                 <tr>
-                    <td>Gs comercializaion</td>
+                    <td>Gs Comercializaion</td>
                     <td>91.072,8 $/cab.</td>
                     <td>14,44%</td>
                     <td>46,12%</td>
@@ -60,7 +60,7 @@
                     <td>20,12%</td>
                 </tr>
                 <tr>
-                    <td>estructura</td>
+                    <td>Estructura</td>
                     <td>59.515 $/cab.</td>
                     <td>9,43%</td>
                     <td>30,14%</td>
@@ -68,13 +68,13 @@
             </tbody>
             <tfoot>
                 <tr class="subtotal-row">
-                    <td>sub total A gastos C/aliment.</td>
+                    <td>Subtotal A gastos C/aliment.</td>
                     <td>630.815,6 $/cab.</td>
                     <td>100,00%</td>
                     <td></td>
                 </tr>
                 <tr class="subtotal-row">
-                    <td>sub total B costos S/aliment.</td>
+                    <td>Subtotal B costos S/aliment.</td>
                     <td>197.459,6 $/cab.</td>
                     <td></td>
                     <td>100,00%</td>
