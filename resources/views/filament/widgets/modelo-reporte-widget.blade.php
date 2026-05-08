@@ -349,11 +349,11 @@
                 <table class="financial-table">
                     <tbody>
                         <tr>
-                            <td>Precio venta a faena</td>
+                            <td>Precio Venta</td>
                             <td>{{ number_format($modelo->precio_venta_faena, 1, ',', '.') }}<span class="rp-unit">$/Kg</span></td>
                         </tr>
                         <tr>
-                            <td>Precio compra terneras/os destete</td>
+                            <td>Precio Compra</td>
                             <td>
                                 <span class="rp-value rp-value-accent">
                                     {{ number_format($modelo->precio_compra_ternero, 1, ',', '.') }}
@@ -361,7 +361,7 @@
                                 </span>
                             </td>
                         </tr>
-                            <td>Peso neto de entrada</td>
+                            <td>Peso Neto Ingreso</td>
                             <td>
                                 <span class="rp-value rp-value-accent">
                                     {{ number_format($modelo->peso_neto_entrada, 1, ',', '.') }}
@@ -370,7 +370,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>Peso neto venta</td>
+                            <td>Peso Neto Venta</td>
                             <td>
                                 <span class="rp-value">
                                     {{ number_format($modelo->peso_neto_venta, 2, ',', '.') }}
@@ -398,7 +398,7 @@
                 <table class="financial-table">
                     <tbody>
                         <tr>
-                            <td colspan="2">Precio TAL CUAL alimento balanceado</td>
+                            <td colspan="2">Precio TC alimento</td>
                             <td>
                                 <span class="rp-value">
                                     {{ number_format($modelo->precio_alimento_balanceado, 1, ',', '.') }}

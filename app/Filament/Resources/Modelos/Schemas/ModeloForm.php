@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Modelos\Schemas;
 
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Select;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 
@@ -22,26 +23,26 @@ class ModeloForm
                     ->columns(3)
                     ->schema([
                         TextInput::make('precio_venta_faena')
-                            ->label('Precio venta a faena ($/kg)')
+                            ->label('Precio Venta ($/kg)')
                             ->numeric()
                             ->required()
                             ->default(0)
                             ->step(0.1),
 
                         TextInput::make('precio_compra_ternero')
-                            ->label('Precio compra terneras/os destete ($/kg)')
+                            ->label('Precio Compra ($/kg)')
                             ->numeric()
                             ->required()
                             ->default(0)
                             ->step(0.1),
                         TextInput::make('peso_neto_entrada')
-                            ->label('Peso neto de entrada (kg)')
+                            ->label('Peso Neto Ingreso (kg)')
                             ->numeric()
                             ->required()
                             ->default(0)
                             ->step(0.01),
                         TextInput::make('peso_neto_venta')
-                            ->label('Peso neto venta (kg)')
+                            ->label('Peso Neto Venta (kg)')
                             ->numeric()
                             ->required()
                             ->default(0)
@@ -58,14 +59,14 @@ class ModeloForm
                             ->step(1),
 
                         TextInput::make('plazo_compra_hacienda')
-                            ->label('Plazo compra hacienda (días)')
+                            ->label('Plazo compra (días)')
                             ->numeric()
                             ->integer()
                             ->required()
                             ->default(30),
 
                         TextInput::make('plazo_venta_hacienda')
-                            ->label('Plazo venta hacienda (días)')
+                            ->label('Plazo venta (días)')
                             ->numeric()
                             ->integer()
                             ->required()
@@ -109,7 +110,7 @@ class ModeloForm
                             ->default(0)
                             ->step(1),
                         TextInput::make('flete_compra_venta_precio')
-                            ->label('Flete compra-venta - precio ($/km)')
+                            ->label('Flete Precio ($/km)')
                             ->numeric()
                             ->required()
                             ->default(0)
@@ -131,18 +132,27 @@ class ModeloForm
                     ->columns(1)
                     ->schema([
                         Section::make('Sanidad')
-                            ->schema([
-                                TextInput::make('mortandad')
-                                    ->label('Mortandad (1%)')
-                                    ->numeric()
-                                    ->required()
-                                    ->default(0)
-                                    ->step(0.1),
-                            ]),
-
+                        ->columns(2)
+                        ->schema([
+                            TextInput::make('mortandad')
+                                ->label('Mortandad')
+                                ->numeric()
+                                ->required()
+                                ->default(0)
+                                ->step(0.1),
+                        ]),
                         Section::make('Nutrición')
-                            ->columns(3)
+                            ->columns(2)
                             ->schema([
+                                Select::make('dieta')
+                                    ->label('Dieta')
+                                    ->options([
+                                        'Dieta 1' => 'Dieta 1',
+                                        'Dieta 2' => 'Dieta 2',
+                                        'Dieta 3' => 'Dieta 3',
+                                    ])
+                                    ->required()
+                                    ->default('Dieta 1'),
                                 TextInput::make('precio_alimento_balanceado')
                                     ->label('Precio tal cual alimento balanceado ($/kg)')
                                     ->numeric()

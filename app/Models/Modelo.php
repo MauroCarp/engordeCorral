@@ -8,6 +8,7 @@ class Modelo extends Model
 {
     protected $fillable = [
         'nombre',
+        'dieta',
         'precio_venta_faena',
         'precio_compra_ternero',
         'precio_alimento_balanceado',
