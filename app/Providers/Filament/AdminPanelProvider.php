@@ -29,6 +29,7 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->darkMode(true,true)
             ->maxContentWidth('full')
             ->globalSearch(false)
             ->sidebarCollapsibleOnDesktop()

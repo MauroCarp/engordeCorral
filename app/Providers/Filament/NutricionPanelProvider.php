@@ -28,6 +28,7 @@ class NutricionPanelProvider extends PanelProvider
             ->id('nutricion')
             ->path('nutricion')
             ->login()
+            ->darkMode(true, true)
             ->colors([
                 'primary' => Color::Teal,
             ])
