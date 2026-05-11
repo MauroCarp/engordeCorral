@@ -4,6 +4,8 @@
             .costo-engorde-table {
                 width: 100%;
                 border-collapse: collapse;
+                 font-family: 'Instrument Sans', sans-serif;
+
             }
             .costo-engorde-table th, .costo-engorde-table td {
                 padding: 0.75rem;
@@ -12,17 +14,22 @@
             }
             .costo-engorde-table th {
                 font-weight: bold;
-                color: #ffffff;
+                color: #d4d4d4;
+                font-size:1.25rem;
             }
             .costo-engorde-table .header-row th {
-                border-bottom: 1px solid #e5e7eb;
+                border-bottom: 2px solid rgb(219, 219, 219);
             }
             .costo-engorde-table .subtotal-row td {
                 font-weight: bold;
-                border-top: 3px solid #c2c2c2;
+                border-top: 2px solid rgb(233, 233, 233);
+                color:#f59e0b;
             }
             .costo-engorde-table td:not(:first-child), .costo-engorde-table th:not(:first-child) {
                 text-align: right;
+            }
+            .costo-engorde-table td:first-child, .costo-engorde-table th:first-child {
+                font-weight: bold;
             }
         </style>
         <table class="costo-engorde-table">
@@ -48,13 +55,13 @@
                     <td>3,62%</td>
                 </tr>
                 <tr>
-                    <td>Gs Comercializaion</td>
+                    <td>Gs Comercialización</td>
                     <td>91.072,8 $/cab.</td>
                     <td>14,44%</td>
                     <td>46,12%</td>
                 </tr>
                 <tr>
-                    <td>Flets</td>
+                    <td>Fletes</td>
                     <td>39.727,18</td>
                     <td>6,30%</td>
                     <td>20,12%</td>

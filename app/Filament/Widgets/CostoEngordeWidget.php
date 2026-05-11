@@ -8,7 +8,7 @@ class CostoEngordeWidget extends Widget
 {
     protected string $view = 'filament.widgets.costo-engorde-widget';
 
-    protected int | string | array $columnSpan = 1;
+    protected int | string | array $columnSpan = 'full';
 
     protected static ?int $sort = 2;
 }

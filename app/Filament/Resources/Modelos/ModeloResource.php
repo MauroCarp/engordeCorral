@@ -51,18 +51,17 @@ class ModeloResource extends Resource
              ComponentsSection::make('Mercado')
                     ->columns(2)
                     ->schema([
-                        Infolists\Components\TextEntry::make('precio_venta_faena')
-                            ->label('Precio venta a faena')
-                            ->numeric(
-                                decimalPlaces: 1,
-                                decimalSeparator: ',',
-                                thousandsSeparator: '.'
-                            )
-                            ->suffix(' $/Kg')
-                            ->size('lg'),
-
                         Infolists\Components\TextEntry::make('precio_compra_ternero')
-                            ->label('Precio compra terneras/os destete')
+                            ->label('Precio Compra')
+                            ->numeric(
+                                decimalPlaces: 1,
+                                decimalSeparator: ',',
+                                thousandsSeparator: '.'
+                            )
+                            ->suffix(' $/Kg')
+                            ->size('lg'),    
+                        Infolists\Components\TextEntry::make('precio_venta_faena')
+                            ->label('Precio Venta')
                             ->numeric(
                                 decimalPlaces: 1,
                                 decimalSeparator: ',',
@@ -70,9 +69,8 @@ class ModeloResource extends Resource
                             )
                             ->suffix(' $/Kg')
                             ->size('lg'),
-
                         Infolists\Components\TextEntry::make('peso_neto_entrada')
-                            ->label('Peso neto de entrada')
+                            ->label('Peso Neto Ingreso')
                             ->numeric(
                                 decimalPlaces: 2,
                                 decimalSeparator: ',',
@@ -82,7 +80,7 @@ class ModeloResource extends Resource
                             ->size('lg'),
 
                         Infolists\Components\TextEntry::make('peso_neto_venta')
-                            ->label('Peso neto venta')
+                            ->label('Peso Neto Venta')
                             ->numeric(
                                 decimalPlaces: 2,
                                 decimalSeparator: ',',
@@ -96,7 +94,7 @@ class ModeloResource extends Resource
                     ->columns(2)
                     ->schema([
                         Infolists\Components\TextEntry::make('tasa_anual')
-                            ->label('Tasa anual')
+                            ->label('Tasa Anual')
                             ->numeric(
                                 decimalPlaces: 0,
                                 decimalSeparator: ',',
@@ -106,7 +104,7 @@ class ModeloResource extends Resource
                             ->size('lg'),
 
                         Infolists\Components\TextEntry::make('plazo_compra_hacienda')
-                            ->label('Plazo compra hacienda')
+                            ->label('Plazo Compra Hacienda')
                             ->numeric(
                                 decimalPlaces: 0
                             )
@@ -114,7 +112,7 @@ class ModeloResource extends Resource
                             ->size('lg'),
 
                         Infolists\Components\TextEntry::make('plazo_venta_hacienda')
-                            ->label('Plazo venta hacienda')
+                            ->label('Plazo Venta Hacienda')
                             ->numeric(
                                 decimalPlaces: 0
                             )
@@ -122,7 +120,7 @@ class ModeloResource extends Resource
                             ->size('lg'),
 
                         Infolists\Components\TextEntry::make('dias_financiamiento_alimento')
-                            ->label('Días de financiamiento alimento')
+                            ->label('Días de Financiamiento Alimento')
                             ->numeric(
                                 decimalPlaces: 0
                             )
@@ -134,7 +132,7 @@ class ModeloResource extends Resource
                     ->columns(2)
                     ->schema([
                         Infolists\Components\TextEntry::make('cabezas_jaula_terneros')
-                            ->label('Cabezas/jaula')
+                            ->label('Cabezas/Jaula')
                             ->numeric(
                                 decimalPlaces: 0
                             )
@@ -142,7 +140,7 @@ class ModeloResource extends Resource
                             ->size('lg'),
 
                         Infolists\Components\TextEntry::make('cabezas_jaula_gordos')
-                            ->label('Cabezas/jaula')
+                            ->label('Cabezas/Jaula')
                             ->numeric(
                                 decimalPlaces: 0
                             )
@@ -150,7 +148,7 @@ class ModeloResource extends Resource
                             ->size('lg'),
 
                         Infolists\Components\TextEntry::make('flete_compra_km')
-                            ->label('Flete compra (km)')
+                            ->label('Flete Compra (km)')
                             ->numeric(
                                 decimalPlaces: 0,
                                 decimalSeparator: ',',
@@ -159,7 +157,7 @@ class ModeloResource extends Resource
                             ->size('lg'),
 
                         Infolists\Components\TextEntry::make('flete_venta_km')
-                            ->label('Flete venta')
+                            ->label('Flete Venta (km)')
                             ->numeric(
                                 decimalPlaces: 0,
                                 decimalSeparator: ',',
@@ -169,7 +167,7 @@ class ModeloResource extends Resource
                             ->size('lg'),
 
                         Infolists\Components\TextEntry::make('flete_compra_venta_precio')
-                            ->label('Flete compra-venta - precio')
+                            ->label('Flete Precio ($/km)')
                             ->numeric(
                                 decimalPlaces: 0,
                                 decimalSeparator: ',',
@@ -200,7 +198,7 @@ class ModeloResource extends Resource
                     ]),
 
                 ComponentsSection::make('')
-                    ->columns(1)
+                    ->columns(2)
                     ->schema([
                         ComponentsSection::make('Sanidad')
                             ->schema([
@@ -219,7 +217,7 @@ class ModeloResource extends Resource
                             ->columns(2)
                             ->schema([
                                 Infolists\Components\TextEntry::make('precio_alimento_balanceado')
-                                    ->label('Precio tal cual alimento balanceado')
+                                    ->label('Precio TC Alimento')
                                     ->numeric(
                                         decimalPlaces: 1,
                                         decimalSeparator: ',',
@@ -229,7 +227,7 @@ class ModeloResource extends Resource
                                     ->size('lg'),
 
                                 Infolists\Components\TextEntry::make('consumo_promedio_ms')
-                                    ->label('Consumo promedio MS en terminación')
+                                    ->label('Consumo Promedio MS en Terminación')
                                     ->numeric(
                                         decimalPlaces: 1,
                                         decimalSeparator: ',',
@@ -239,7 +237,7 @@ class ModeloResource extends Resource
                                     ->size('lg'),
 
                                 Infolists\Components\TextEntry::make('eficiencia_conversion')
-                                    ->label('Eficiencia conversión')
+                                    ->label('Eficiencia Conversión')
                                     ->numeric(
                                         decimalPlaces: 1,
                                         decimalSeparator: ',',

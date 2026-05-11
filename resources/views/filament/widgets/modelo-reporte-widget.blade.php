@@ -349,28 +349,28 @@
                 <table class="financial-table">
                     <tbody>
                         <tr>
-                            <td>Precio venta a faena</td>
+                            <td>Precio Venta</td>
                             <td>{{ number_format($modelo->precio_venta_faena, 1, ',', '.') }}<span class="rp-unit">$/Kg</span></td>
                         </tr>
                         <tr>
-                            <td>Precio compra terneras/os destete</td>
+                            <td>Precio Compra</td>
                             <td>
-                                <span class="rp-value rp-value-accent">
+                                <span class="rp-value">
                                     {{ number_format($modelo->precio_compra_ternero, 1, ',', '.') }}
                                     <span class="rp-unit">$/Kg</span>
                                 </span>
                             </td>
                         </tr>
-                            <td>Peso neto de entrada</td>
+                            <td>Peso Neto Ingreso</td>
                             <td>
-                                <span class="rp-value rp-value-accent">
+                                <span class="rp-value">
                                     {{ number_format($modelo->peso_neto_entrada, 1, ',', '.') }}
                                     <span class="rp-unit">$/Kg</span>
                                 </span>
                             </td>
                         </tr>
                         <tr>
-                            <td>Peso neto venta</td>
+                            <td>Peso Neto Venta</td>
                             <td>
                                 <span class="rp-value">
                                     {{ number_format($modelo->peso_neto_venta, 2, ',', '.') }}
@@ -393,12 +393,20 @@
                     </svg>
                 </span>
                 <span class="rp-section-title">Nutrición</span>
+                 | 
+                <span class="rp-section-icon icon-rose">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                            </svg>
+                        </span>
+                        <span class="rp-section-title">Sanidad</span>
             </div>
             <div class="rp-section-body" style="display:block">
                 <table class="financial-table">
                     <tbody>
                         <tr>
-                            <td colspan="2">Precio TAL CUAL alimento balanceado</td>
+                            <td colspan="2">Precio TC alimento</td>
                             <td>
                                 <span class="rp-value">
                                     {{ number_format($modelo->precio_alimento_balanceado, 1, ',', '.') }}
@@ -465,9 +473,21 @@
                                 </span>
                             </td>
                         </tr>
+                        <tr>
+                            <td>Mortandad</td>
+                            <td colspan="3">
+                            </td>
+                            <td>
+                                <span class="rp-value">
+                                    {{ number_format($modelo->mortandad, 1, ',', '.') }}
+                                    <span class="rp-unit">%</span>
+                                </span>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
+        </div>
         </div>
 
            {{-- Comercialización (full width) --}}
@@ -503,6 +523,17 @@
                             <td>$/kg 13,768</td>
                             <td>5.231,80 $/cab.</td>
                         </tr>
+                        <tr>
+                            <td>Costo de compra (%)</td>
+                            <td colspan="3"></td>
+                            <td style="text-align: center;">{{ number_format($modelo->gastos_compra, 2, ',', '.') }}%</td>
+                        </tr>
+                        <tr>
+                            <td>Costo de venta (%)</td>
+                            <td colspan="3"></td>
+                            <td style="text-align: center;">{{ number_format($modelo->gastos_venta, 2, ',', '.') }}%</td>
+                        </tr>
+                        
                     </tbody>
                 </table>
             </div>
@@ -565,7 +596,7 @@
                         </tr>
                         <tr class="total-row">
                             <td colspan="2" class="total-label">Utilidad <span class="highlight">antes de impuestos nacionales y provinciales</span> SIN costo financiero</td>
-                            <td class="highlight" style="background-color: #28a745; color: white; text-align: right;">$ 285.424,40</td>
+                            <td class="highlight rp-value-accent" style="text-align: right;">$ 285.424,40</td>
                         </tr>
                     </tbody>
                 </table>
@@ -606,9 +637,9 @@
                     <tbody>
                         <tr>
                             <td>Hacienda</td>
-                            <td class="highlight">{{ $modelo->plazo_compra_hacienda }} días</td>
-                            <td class="highlight">{{ $modelo->plazo_venta_hacienda }} días</td>
-                            <td class="highlight">170 días</td>
+                            <td>{{ $modelo->plazo_compra_hacienda }} días</td>
+                            <td>{{ $modelo->plazo_venta_hacienda }} días</td>
+                            <td>170 días</td>
                             <td>12%</td>
                             <td>$ 128.838,85</td>
                         </tr>
@@ -616,7 +647,7 @@
                             <td>Alimento</td>
                             <td>(pago AB cada 15 días)</td>
                             <td></td>
-                            <td class="highlight">60 días</td>
+                            <td>60 días</td>
                             <td>4%</td>
                             <td>$ 17.809,15</td>
                         </tr>
@@ -628,7 +659,7 @@
                         </tr>
                         <tr class="total-row">
                             <td colspan="5" class="total-label">Utilidad <span class="highlight">antes de impuestos nacionales y provinciales</span> CON costo financiero</td>
-                            <td class="highlight" style="background-color: #28a745; text-align: right;">$ 138.776,40</td>
+                            <td class="highlight" style="text-align: right;">$ 138.776,40</td>
                         </tr>
                     </tfoot>
                 </table>
@@ -636,33 +667,7 @@
         </div>
 
      
-                        {{-- Sanidad --}}
-                {{-- <div class="rp-section">
-                    <div class="rp-section-header">
-                        <span class="rp-section-icon icon-rose">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
-                            </svg>
-                        </span>
-                        <span class="rp-section-title">Sanidad</span>
-                    </div>
-                    <div class="rp-section-body cols-1">
-                        <div class="rp-field">
-                            <span class="rp-label">Mortandad</span>
-                            <span class="rp-value" style="font-size:1.5rem">
-                                {{ number_format($modelo->mortandad, 1, ',', '.') }}
-                                <span class="rp-unit">%</span>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                 --}}
-        {{-- Sanidad + Nutrición side by side (full width) --}}
-        
-
-
-    </div>{{-- /rp-grid --}}
+    </div>
     @endif
 
 </div>{{-- /reporte-root --}}
