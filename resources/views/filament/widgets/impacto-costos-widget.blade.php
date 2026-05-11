@@ -21,7 +21,7 @@
                 --r2: 10px;
 
                 font-family: 'Instrument Sans', sans-serif;
-                background: var(--c-bg);
+                /* background: var(--c-bg); */
                 color: var(--c-text);
                 padding: 0rem 2rem 2rem 2rem;
                 border-radius: var(--r2);
