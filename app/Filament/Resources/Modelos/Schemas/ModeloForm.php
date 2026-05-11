@@ -2,6 +2,9 @@
 
 namespace App\Filament\Resources\Modelos\Schemas;
 
+use App\Models\Dieta;
+use Closure;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
 use Filament\Schemas\Components\Section;
@@ -143,15 +146,54 @@ class ModeloForm
                         Section::make('Nutrición')
                             ->columns(2)
                             ->schema([
-                                Select::make('dieta')
-                                    ->label('Dieta')
-                                    ->options([
-                                        'Dieta 1' => 'Dieta 1',
-                                        'Dieta 2' => 'Dieta 2',
-                                        'Dieta 3' => 'Dieta 3',
+                                Repeater::make('dieta')
+                                    ->label('Composición de dieta')
+                                    ->schema([
+                                        Select::make('nombre')
+                                            ->label('Dieta')
+                                            ->options(fn (): array => Dieta::query()->orderBy('nombre')->pluck('nombre', 'nombre')->all())
+                                            ->searchable()
+                                            ->preload()
+                                            ->disableOptionsWhenSelectedInSiblingRepeaterItems()
+                                            ->required(),
+                                        TextInput::make('porcentaje')
+                                            ->label('Porcentaje')
+                                            ->numeric()
+                                            ->required()
+                                            ->minValue(0.01)
+                                            ->maxValue(100)
+                                            ->step(0.01)
+                                            ->suffix('%'),
                                     ])
+                                    ->columns(2)
+                                    ->columnSpanFull()
+                                    ->default([
+                                        ['nombre' => null, 'porcentaje' => 100],
+                                    ])
+                                    ->minItems(1)
+                                    ->reorderable(false)
+                                    ->addActionLabel('Agregar dieta')
+                                    ->helperText('La suma de los porcentajes debe ser exactamente 100.')
                                     ->required()
-                                    ->default('Dieta 1'),
+                                    ->rule(static function (): Closure {
+                                        return static function (string $attribute, $value, Closure $fail): void {
+                                            if (! is_array($value) || $value === []) {
+                                                $fail('Debe cargar al menos una dieta.');
+
+                                                return;
+                                            }
+
+                                            $total = 0;
+
+                                            foreach ($value as $item) {
+                                                $total += (float) ($item['porcentaje'] ?? 0);
+                                            }
+
+                                            if (round($total, 2) !== 100.0) {
+                                                $fail('La suma de los porcentajes de las dietas debe ser exactamente 100.');
+                                            }
+                                        };
+                                    }),
                                 TextInput::make('precio_alimento_balanceado')
                                     ->label('Precio tal cual alimento balanceado ($/kg)')
                                     ->numeric()

@@ -31,6 +31,7 @@ class Modelo extends Model
     ];
 
     protected $casts = [
+        'dieta'                         => 'array',
         'precio_venta_faena'           => 'decimal:2',
         'precio_compra_ternero'        => 'decimal:2',
         'precio_alimento_balanceado'   => 'decimal:2',
