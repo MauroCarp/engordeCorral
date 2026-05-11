@@ -20,17 +20,16 @@ class ModeloForm
                     ->columnSpanFull(),
 
                 Section::make('Mercado')
-                    ->columns(3)
+                    ->columns(2)
                     ->schema([
-                        TextInput::make('precio_venta_faena')
-                            ->label('Precio Venta ($/kg)')
+                        TextInput::make('precio_compra_ternero')
+                            ->label('Precio Compra ($/kg)')
                             ->numeric()
                             ->required()
                             ->default(0)
                             ->step(0.1),
-
-                        TextInput::make('precio_compra_ternero')
-                            ->label('Precio Compra ($/kg)')
+                        TextInput::make('precio_venta_faena')
+                            ->label('Precio Venta ($/kg)')
                             ->numeric()
                             ->required()
                             ->default(0)
@@ -109,12 +108,6 @@ class ModeloForm
                             ->required()
                             ->default(0)
                             ->step(1),
-                        TextInput::make('flete_compra_venta_precio')
-                            ->label('Flete Precio ($/km)')
-                            ->numeric()
-                            ->required()
-                            ->default(0)
-                            ->step(1),
                         TextInput::make('gastos_compra')
                             ->label('Gastos de compra (%)')
                             ->numeric()
@@ -123,6 +116,12 @@ class ModeloForm
                             ->step(1),
                         TextInput::make('gastos_venta')
                             ->label('Gastos de venta (%)')
+                            ->numeric()
+                            ->required()
+                            ->default(0)
+                            ->step(1),
+                        TextInput::make('flete_compra_venta_precio')
+                            ->label('Flete Precio ($/km)')
                             ->numeric()
                             ->required()
                             ->default(0)

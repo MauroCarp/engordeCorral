@@ -51,6 +51,15 @@ class ModeloResource extends Resource
              ComponentsSection::make('Mercado')
                     ->columns(2)
                     ->schema([
+                        Infolists\Components\TextEntry::make('precio_compra_ternero')
+                            ->label('Precio Compra')
+                            ->numeric(
+                                decimalPlaces: 1,
+                                decimalSeparator: ',',
+                                thousandsSeparator: '.'
+                            )
+                            ->suffix(' $/Kg')
+                            ->size('lg'),    
                         Infolists\Components\TextEntry::make('precio_venta_faena')
                             ->label('Precio Venta')
                             ->numeric(
@@ -60,17 +69,6 @@ class ModeloResource extends Resource
                             )
                             ->suffix(' $/Kg')
                             ->size('lg'),
-
-                        Infolists\Components\TextEntry::make('precio_compra_ternero')
-                            ->label('Precio Compra')
-                            ->numeric(
-                                decimalPlaces: 1,
-                                decimalSeparator: ',',
-                                thousandsSeparator: '.'
-                            )
-                            ->suffix(' $/Kg')
-                            ->size('lg'),
-
                         Infolists\Components\TextEntry::make('peso_neto_entrada')
                             ->label('Peso Neto Ingreso')
                             ->numeric(
