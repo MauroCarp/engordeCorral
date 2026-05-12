@@ -18,14 +18,23 @@ class RacionsTable
                     ->label('Nombre')
                     ->searchable()
                     ->sortable(),
-                TextColumn::make('insumos_texto')
+                TextColumn::make('composicion_texto')
                     ->label('Insumos')
                     ->wrap()
                     ->toggleable(),
-                TextColumn::make('total_porcentajes')
-                    ->label('Total %')
+                TextColumn::make('porcentaje_ms')
+                    ->label('% MS')
+                    ->numeric(decimalPlaces: 2, decimalSeparator: ',', thousandsSeparator: '.')
                     ->suffix('%')
-                    ->toggleable(),
+                    ->sortable(),
+                TextColumn::make('costo_kg_tc')
+                    ->label('$/Kg TC')
+                    ->money('ARS', divideBy: 1)
+                    ->sortable(),
+                TextColumn::make('costo_kg_ms')
+                    ->label('$/Kg MS')
+                    ->money('ARS', divideBy: 1)
+                    ->sortable(),
             ])
             ->filters([
                 //
