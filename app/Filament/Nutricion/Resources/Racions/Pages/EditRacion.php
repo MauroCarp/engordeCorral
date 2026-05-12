@@ -10,6 +10,13 @@ class EditRacion extends EditRecord
 {
     protected static string $resource = RacionResource::class;
 
+    protected function mutateFormDataBeforeFill(array $data): array
+    {
+        $data['composicion'] = $this->record->composicion;
+
+        return $data;
+    }
+
     protected function getHeaderActions(): array
     {
         return [
