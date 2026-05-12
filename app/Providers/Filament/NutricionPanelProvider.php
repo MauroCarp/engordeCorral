@@ -45,8 +45,8 @@ class NutricionPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Nutricion/Widgets'), for: 'App\Filament\Nutricion\Widgets')
             ->widgets([
-                AccountWidget::class,
-                FilamentInfoWidget::class,
+                // AccountWidget::class,
+                // FilamentInfoWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,

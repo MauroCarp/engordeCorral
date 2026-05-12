@@ -2,7 +2,7 @@
 
 namespace App\Filament\Resources\Modelos\Schemas;
 
-use App\Models\Dieta;
+use App\Models\Racion;
 use Closure;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\TextInput;
@@ -147,11 +147,11 @@ class ModeloForm
                             ->columns(2)
                             ->schema([
                                 Repeater::make('dieta')
-                                    ->label('Composición de dieta')
+                                    ->label('Composición de raciones')
                                     ->schema([
                                         Select::make('nombre')
-                                            ->label('Dieta')
-                                            ->options(fn (): array => Dieta::query()->orderBy('nombre')->pluck('nombre', 'nombre')->all())
+                                            ->label('Ración')
+                                            ->options(fn (): array => Racion::query()->orderBy('nombre')->pluck('nombre', 'nombre')->all())
                                             ->searchable()
                                             ->preload()
                                             ->disableOptionsWhenSelectedInSiblingRepeaterItems()
@@ -172,13 +172,13 @@ class ModeloForm
                                     ])
                                     ->minItems(1)
                                     ->reorderable(false)
-                                    ->addActionLabel('Agregar dieta')
-                                    ->helperText('La suma de los porcentajes debe ser exactamente 100.')
+                                    ->addActionLabel('Agregar ración')
+                                    ->helperText('La suma de los porcentajes de las raciones debe ser exactamente 100.')
                                     ->required()
                                     ->rule(static function (): Closure {
                                         return static function (string $attribute, $value, Closure $fail): void {
                                             if (! is_array($value) || $value === []) {
-                                                $fail('Debe cargar al menos una dieta.');
+                                                $fail('Debe cargar al menos una ración.');
 
                                                 return;
                                             }

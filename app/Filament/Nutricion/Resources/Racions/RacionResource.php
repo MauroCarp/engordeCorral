@@ -20,6 +20,12 @@ class RacionResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
+    protected static ?string $navigationLabel = 'Raciones';
+
+    protected static ?string $modelLabel = 'Ración';
+
+    protected static ?string $pluralModelLabel = 'Raciones';
+
     public static function form(Schema $schema): Schema
     {
         return RacionForm::configure($schema);
