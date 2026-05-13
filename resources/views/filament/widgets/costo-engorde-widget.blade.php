@@ -44,13 +44,13 @@
             <tbody>
                 <tr>
                     <td>Alimento</td>
-                    <td>433.356,0 $/cab.</td>
+                    <td><span id='costoAlimento'>433.356,0</span> $/cab.</td>
                     <td>68,70%</td>
                     <td></td>
                 </tr>
                 <tr>
                     <td>Sanidad</td>
-                    <td>7.145 $/cab.</td>
+                    <td><span id='costoSanidad'>7.145</span> $/cab.</td>
                     <td>1,13%</td>
                     <td>3,62%</td>
                 </tr>
@@ -68,7 +68,7 @@
                 </tr>
                 <tr>
                     <td>Estructura</td>
-                    <td>59.515 $/cab.</td>
+                    <td><span id="costoEstructura">59.515</span> $/cab.</td>
                     <td>9,43%</td>
                     <td>30,14%</td>
                 </tr>
