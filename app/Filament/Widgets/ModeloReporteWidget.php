@@ -6,6 +6,7 @@ use App\Models\Modelo;
 use App\Models\SanidadEstructura;
 use Filament\Widgets\Widget;
 use Illuminate\Support\Collection;
+use stdClass;
 
 class ModeloReporteWidget extends Widget
 {
@@ -26,11 +27,17 @@ class ModeloReporteWidget extends Widget
     /** @var Collection<int, SanidadEstructura> */
     public Collection $sanidadEstructura;
 
+    public stdClass $sanEst;
+
     public array $modeloOptions = [];
 
     public function boot(): void
     {
         $this->sanidadEstructura = collect();
+        $this->sanEst = (object) [
+            'estructura' => collect(),
+            'sanidad' => collect(),
+        ];
     }
 
     public function mount(): void
@@ -56,9 +63,7 @@ class ModeloReporteWidget extends Widget
             session([self::SELECTED_MODELO_SESSION_KEY => $this->selectedModeloId]);
         }
 
-        $this->sanidadEstructura = $this->selectedModeloId
-            ? SanidadEstructura::where('modelo_id', $this->selectedModeloId)->get()
-            : collect();
+        $this->syncSanidadData($this->selectedModeloId);
     }
 
     public function updatedSelectedModeloId(?int $value): void
@@ -66,6 +71,7 @@ class ModeloReporteWidget extends Widget
         if (! $value) {
             $this->modelo = null;
             session()->forget(self::SELECTED_MODELO_SESSION_KEY);
+            $this->syncSanidadData(null);
 
             return;
         }
@@ -76,8 +82,20 @@ class ModeloReporteWidget extends Widget
             session([self::SELECTED_MODELO_SESSION_KEY => $this->modelo->id]);
         }
 
-        $this->sanidadEstructura = $this->modelo
-            ? SanidadEstructura::where('modelo_id', $this->modelo->id)->get()
+        $this->syncSanidadData($this->modelo?->id);
+    }
+
+    private function syncSanidadData(?int $modeloId): void
+    {
+        $this->sanidadEstructura = $modeloId
+            ? SanidadEstructura::where('modelo_id', $modeloId)->get()
             : collect();
+
+        $agrupado = $this->sanidadEstructura->groupBy('tipo');
+
+        $this->sanEst = (object) [
+            'estructura' => $agrupado->get('estructura', collect())->values(),
+            'sanidad' => $agrupado->get('sanidad', collect())->values(),
+        ];
     }
 }

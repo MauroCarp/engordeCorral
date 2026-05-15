@@ -599,7 +599,7 @@
                         <tr>
                             <td>Total Gastos de Comercializacion</td>
                             <td colspan="3"></td>
-                            <td>{{ number_format(round($gastoCompraCab + $gastoVentaCab + $fleteVentaCab + $fleteCompraCab,2),2,',','.') }} $/cab.</td>
+                            <td>{{ number_format(ceil($gastoCompraCab + $gastoVentaCab + $fleteVentaCab + $fleteCompraCab),2,',','.') }} $/cab.</td>
                         </tr>
                         
                     </tbody>
@@ -619,18 +619,31 @@
                 <span class="rp-section-title">COSTOS</span>
             </div>
             <div class="rp-section-body" style="display:block">
-                
+               @php
+                    $totalEstructura = 0;
+                    foreach ($sanEst->estructura as $key => $value) {
+                        $totalEstructura += $value->costo_mes;
+                    }
+
+                    $costoAmort_estructura = $totalEstructura / 30.5 / $modelo->capacidad_estructura;
+
+                    $totalSanidad = 0;
+                    foreach ($sanEst->sanidad as $key => $value) {
+                        $totalSanidad += $value->costo_mes;
+                    }
+
+                @endphp
                 <table class="financial-table">
                     <tbody>
                         <tr>
                             <td>Costo Amortización / Estructura/Personal *</td>
-                            <td style="text-align: right;">311,48 $/día/cab</td>
-                            <td style="text-align: right;">59.515 $/cab.</td>
+                            <td style="text-align: right;">{{ number_format($costoAmort_estructura,2,',','.') }} $/día/cab</td>
+                            <td style="text-align: right;">{{ number_format(ceil($costoAmort_estructura * $diasEficiencia * (1 + ($modelo->mortandad/2))),2,',','.') }} $/cab.</td>
                         </tr>
                         <tr>
                             <td>Costo Sanidad e identificación</td>
-                            <td style="text-align: right;">$/cab 7.074,00</td>
-                            <td style="text-align: right;">7.145 $/cab.</td>
+                            <td style="text-align: right;">$/cab {{ number_format($totalSanidad,2,',','.') }}</td>
+                            <td style="text-align: right;">{{ number_format(ceil($totalSanidad * ( 1 + $modelo->mortandad)),2,',','.') }} $/cab.</td>
                         </tr>
                         <tr>
                             <td>Costo Alimentación</td>
@@ -648,19 +661,21 @@
                         </tr>
                         <tr>
                             <td colspan="2">Valor ternero invernada</td>
-                            <td style="text-align: right;">$ 1.040.000,0</td>
+                            <td style="text-align: right;">$ {{ number_format($modelo->precio_compra_ternero * $modelo->peso_neto_entrada,2,',','.') }}</td>
                         </tr>
                         <tr>
                             <td colspan="2">Costos totales Engorde</td>
-                            <td style="text-align: right;">$ 500.015,6</td>
+                            {{-- <td style="text-align: right;">$ {{ number_format($costosTotalesEngorde,2,',','.') }}</td> --}}
                         </tr>
                         <tr>
                             <td colspan="2">Gastos de comercialización</td>
-                            <td style="text-align: right;">$ 130.800,0</td>
+                            {{-- <td style="text-align: right;">$ {{ number_format($gastosComercializacion,2,',','.') }}</td> --}}
+                            <td style="text-align: right;">$ {{ number_format(ceil($gastoCompraCab + $gastoVentaCab + $fleteVentaCab + $fleteCompraCab),2,',','.') }}.</td>
+
                         </tr>
                         <tr>
                             <td colspan="2">Valor ternero gordo</td>
-                            <td style="text-align: right;">$ 1.956.240,0</td>
+                            <td style="text-align: right;">$ {{ number_format($modelo->precio_venta_ternero * $modelo->peso_neto_venta * (1 - $modelo->mortandad),2,',','.') }}</td>
                         </tr>
                         <tr class="total-row">
                             <td colspan="2" class="total-label">Utilidad <span class="highlight">antes de impuestos nacionales y provinciales</span> SIN costo financiero</td>
