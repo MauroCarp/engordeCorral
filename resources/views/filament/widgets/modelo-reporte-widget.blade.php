@@ -349,14 +349,19 @@
                 <table class="financial-table">
                     <tbody>
                         <tr>
-                            <td>Precio Venta</td>
-                            <td>{{ number_format($modelo->precio_venta_faena, 1, ',', '.') }}<span class="rp-unit">$/Kg</span></td>
-                        </tr>
-                        <tr>
                             <td>Precio Compra</td>
                             <td>
+                            <span class="rp-value">
+                                {{ number_format($modelo->precio_compra_ternero, 1, ',', '.') }}
+                                <span class="rp-unit">$/Kg</span>
+                            </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Precio Venta</td>
+                            <td>
                                 <span class="rp-value">
-                                    {{ number_format($modelo->precio_compra_ternero, 1, ',', '.') }}
+                                    {{ number_format($modelo->precio_venta_faena, 1, ',', '.') }}<span class="rp-unit">$/Kg</span>
                                     <span class="rp-unit">$/Kg</span>
                                 </span>
                             </td>
@@ -409,39 +414,55 @@
                             <td colspan="2">Precio TC alimento</td>
                             <td>
                                 <span class="rp-value">
-                                    {{ number_format($modelo->precio_alimento_balanceado, 1, ',', '.') }}
+                                    {{-- {{ number_format($modelo->precio_alimento_balanceado, 1, ',', '.') }} --}}Calcular este valor desde la composicion de la dieta
                                     <span class="rp-unit">% de Materia Seca</span>
                                 </span>
                             </td>
                             <td>
                                 <span class="rp-value">
-                                    {{ number_format($modelo->eficiencia_conversion, 1, ',', '.') }}
+                                    Precio TC alimento Balanceado / % Materia Seca
+                                    {{-- {{ number_format($modelo->precio_alimento_balanceado, 1, ',', '.') }} --}}
                                     <span class="rp-unit">$/Kg(MS)</span>
                                 </span>
                             </td>
                             <td><span class="rp-value">
-                                    {{ number_format($modelo->eficiencia_conversion, 1, ',', '.') }}
+                                    {{ number_format($modelo->precio_alimento_balanceado, 1, ',', '.') }}
                                     <span class="rp-unit">$/Kg</span>
                                 </span>
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="2">Consumo promedio MS en terminación</td>
+                            <td>Consumo promedio MS en terminación</td>
                             <td>
                                 <span class="rp-value">
-                                    {{ number_format($modelo->consumo_promedio_ms, 1, ',', '.') }}
+                                    {{ number_format($modelo->consumo_promedio_ms * 100, 1, ',', '.') }}
                                     <span class="rp-unit">% PV</span>
                                 </span>
                             </td>
                             <td>
                                <span class="rp-value">
-                                    {{ number_format($modelo->eficiencia_conversion, 1, ',', '.') }}
+                                    @php
+                                       $kgMsCabDia = ($modelo->peso_neto_entrada == $modelo->peso_neto_venta) ? 0 : (($modelo->peso_neto_entrada + $modelo->peso_neto_venta) / 2) * $modelo->consumo_promedio_ms;
+                                    @endphp
+                                    {{ $kgMsCabDia }}
                                     <span class="rp-unit">Kg MS/Cab dia</span>
                                 </span> 
                             </td>
                             <td>
                                <span class="rp-value">
-                                    {{ number_format($modelo->eficiencia_conversion, 1, ',', '.') }}
+                                    @php
+                                    //    $kgMvCabDia = $kgMsCabDia / %MS
+                                    @endphp
+                                    $kgMvCabDia = $kgMsCabDia / %MS
+
+                                    {{-- {{ $kgMvCabDia }} --}}
+                                    <span class="rp-unit">Kg MV/Cab dia</span>
+                                </span> 
+                            </td>
+                            <td>
+                               <span class="rp-value">
+                                    {{-- {{ number_format($kgMvCabDia * $modelo->precio_alimento_balanceado, 1, ',', '.') }} --}}
+                                    $kgMvCabDia * $modelo->precio_alimento_balanceado
                                     <span class="rp-unit">$/dia</span>
                                 </span> 
                             </td>
@@ -450,25 +471,33 @@
                             <td>Eficiencia conversión y Ciclo terminación</td>
                             <td>
                                 <span class="rp-value">
-                                    {{ number_format($modelo->consumo_promedio_ms, 1, ',', '.') }}
+                                    {{ number_format($modelo->eficiencia_conversion, 1, ',', '.') }}
                                     <span class="rp-unit">Kg MS/Kg carne</span>
                                 </span>
                             </td>
                             <td>
                                 <span class="rp-value">
-                                    {{ number_format($modelo->eficiencia_conversion, 1, ',', '.') }}
+                                    @php
+                                        $adpv = $kgMsCabDia / $modelo->eficiencia_conversion;
+                                    @endphp
+                                    {{ number_format($adpv, 1, ',', '.') }}
                                     <span class="rp-unit">Kg ADPV</span>
                                 </span>
                             </td>
                             <td>
                                 <span class="rp-value">
-                                    {{ number_format($modelo->eficiencia_conversion, 0, ',', '.') }}
+                                    @php
+                                        $diasEficiencia = ($modelo->peso_neto_venta == $modelo->peso_neto_entrada) ? 0 : ($modelo->peso_neto_venta - $modelo->peso_neto_entrada) / $adpv;
+
+                                        $mesesEficiencia = ($modelo->peso_neto_venta == $modelo->peso_neto_entrada) ? 0 : $diasEficiencia / 30;
+                                    @endphp
+                                    {{ number_format($mesesEficiencia, 0, ',', '.') }}
                                     <span class="rp-unit">Meses</span>
                                 </span>
                             </td>
                             <td>
                                 <span class="rp-value">
-                                    {{ number_format($modelo->eficiencia_conversion, 0, ',', '.') }}
+                                    {{ number_format($diasEficiencia, 0, ',', '.') }}
                                     <span class="rp-unit">Dias</span>
                                 </span>
                             </td>
@@ -479,7 +508,7 @@
                             </td>
                             <td>
                                 <span class="rp-value">
-                                    {{ number_format($modelo->mortandad, 1, ',', '.') }}
+                                    {{ number_format($modelo->mortandad * 100, 1, ',', '.') }}
                                     <span class="rp-unit">%</span>
                                 </span>
                             </td>
@@ -512,26 +541,45 @@
                     <tbody>
                         <tr>
                             <td>Flete compra</td>
-                            <td rowspan="2">3.737,00 $/km</td>
-                            <td>(600 km)</td>
-                            <td>$/kg 215,596</td>
-                            <td>34.495,38 $/cab.</td>
+                            <td rowspan="2">{{ number_format($modelo->flete_compra_venta_precio,2,',','.') }} $/km</td>
+                            <td>({{ number_format($modelo->flete_compra_km,0,',','.') }} km)</td>
+                            @php
+                                $fleteCompraCab = ($modelo->flete_compra_venta_precio * $modelo->flete_compra_km) / $modelo->cabezas_jaula_terneros;
+                            @endphp
+                            <td>$/kg {{ number_format(($fleteCompraCab / $modelo->peso_neto_entrada),2,',','.') }}</td>
+                            <td>{{ number_format($fleteCompraCab,2,',','.') }} $/cab.</td>
                         </tr>
                         <tr>
                             <td>Flete venta</td>
-                            <td>(70 km)</td>
-                            <td>$/kg 13,768</td>
-                            <td>5.231,80 $/cab.</td>
+                            <td>({{ number_format($modelo->flete_venta_km,0,',','.') }} km)</td>
+                            @php
+                                $fleteVentaCab = ($modelo->flete_compra_venta_precio * $modelo->flete_venta_km) / $modelo->cabezas_jaula_terneros;
+                            @endphp
+                            <td>$/kg {{ number_format($fleteVentaCab / $modelo->peso_neto_entrada,2,',','.') }}</td>
+                            <td>{{ number_format($fleteVentaCab,2,',','.') }} $/cab.</td>
                         </tr>
                         <tr>
                             <td>Costo de compra (%)</td>
-                            <td colspan="3"></td>
-                            <td style="text-align: center;">{{ number_format($modelo->gastos_compra, 2, ',', '.') }}%</td>
+                            <td style="text-align: center;">{{ number_format($modelo->gastos_compra * 100, 2, ',', '.') }}%</td>
+                            <td></td>
+                            @php
+                                $gastoCompraCab = $modelo->peso_neto_entrada * $modelo->precio_compra_ternero * $modelo->gastos_compra;
+                                        
+                            @endphp
+                        {{-- @dd($modelo->peso_neto_entrada,$modelo->gastos_compra,$modelo->precio_compra_ternero) --}}
+                            <td>$/kg {{ number_format($gastoCompraCab / $modelo->peso_neto_entrada,2,',','.') }}</td>
+                            <td>{{ number_format($gastoCompraCab,2,',','.') }} $/cab.</td>
                         </tr>
                         <tr>
                             <td>Costo de venta (%)</td>
-                            <td colspan="3"></td>
-                            <td style="text-align: center;">{{ number_format($modelo->gastos_venta, 2, ',', '.') }}%</td>
+                            <td style="text-align: center;">{{ number_format($modelo->gastos_venta * 100, 2, ',', '.') }}%</td>
+                            <td></td>
+                            @php
+                                $gastoVentaCab = ($modelo->peso_neto_venta * ($modelo->mortandad + 1)) *$modelo->precio_venta_faena * $modelo->gastos_venta;
+                            @endphp
+                            <td>$/kg {{ number_format($gastoVentaCab / $modelo->peso_neto_venta,2,',','.') }}</td>
+                            <td>{{ number_format($gastoVentaCab,2,',','.') }} $/cab.</td>
+
                         </tr>
                         
                     </tbody>
