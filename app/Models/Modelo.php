@@ -28,6 +28,7 @@ class Modelo extends Model
         'plazo_compra_hacienda',
         'plazo_venta_hacienda',
         'dias_financiamiento_alimento',
+        'capacidad_estructura',
     ];
 
     protected $casts = [
@@ -46,5 +47,6 @@ class Modelo extends Model
         'gastos_compra'                => 'decimal:4',
         'gastos_venta'                 => 'decimal:4',
         'tasa_anual'                   => 'decimal:4',
+        'capacidad'                    => 'integer',
     ];
 }

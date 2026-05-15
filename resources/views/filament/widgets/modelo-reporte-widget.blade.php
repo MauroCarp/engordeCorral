@@ -115,6 +115,23 @@
         gap: .5rem;
     }
 
+    .rp-modelo-select {
+        min-width: 240px;
+        background: var(--c-surface-2);
+        border: 1px solid var(--c-border);
+        color: var(--c-heading);
+        font-family: 'DM Mono', monospace;
+        font-size: .78rem;
+        border-radius: var(--r);
+        padding: .45rem .65rem;
+        outline: none;
+    }
+
+    .rp-modelo-select:focus {
+        border-color: var(--c-accent);
+        box-shadow: 0 0 0 2px var(--c-accent-dim);
+    }
+
     .rp-badge {
         display: inline-flex;
         align-items: center;
@@ -302,19 +319,17 @@
     {{-- ── Header ── --}}
     <div class="rp-header">
         <div class="rp-title-block">
-            <div class="rp-eyebrow">Engorde a Corral {{$modelo->nombre}}</div>
+            <div class="rp-eyebrow">Engorde a Corral {{ $modelo?->nombre ?? 'Sin modelo' }}</div>
+            
         </div>
-        {{-- @if($modelo)
         <div class="rp-meta">
-            <span class="rp-badge">
-                <span class="rp-badge-dot"></span>
-                Registro #{{ $modelo->id }}
-            </span>
-            @if($modelo->created_at)
-            <span class="rp-date">{{ $modelo->created_at->format('d/m/Y — H:i') }}</span>
-            @endif
+            <select wire:model.live="selectedModeloId" class="rp-modelo-select">
+                <option value="">Seleccionar modelo</option>
+                @foreach($modeloOptions as $id => $nombre)
+                    <option value="{{ $id }}">{{ $nombre }}</option>
+                @endforeach
+            </select>
         </div>
-        @endif --}}
     </div>
 
     @if(!$modelo)
@@ -553,7 +568,7 @@
                             <td>Flete venta</td>
                             <td>({{ number_format($modelo->flete_venta_km,0,',','.') }} km)</td>
                             @php
-                                $fleteVentaCab = ($modelo->flete_compra_venta_precio * $modelo->flete_venta_km) / $modelo->cabezas_jaula_terneros;
+                                $fleteVentaCab = ($modelo->flete_compra_venta_precio * $modelo->flete_venta_km) / $modelo->cabezas_jaula_gordos;
                             @endphp
                             <td>$/kg {{ number_format($fleteVentaCab / $modelo->peso_neto_entrada,2,',','.') }}</td>
                             <td>{{ number_format($fleteVentaCab,2,',','.') }} $/cab.</td>
@@ -581,6 +596,11 @@
                             <td>{{ number_format($gastoVentaCab,2,',','.') }} $/cab.</td>
 
                         </tr>
+                        <tr>
+                            <td>Total Gastos de Comercializacion</td>
+                            <td colspan="3"></td>
+                            <td>{{ number_format(round($gastoCompraCab + $gastoVentaCab + $fleteVentaCab + $fleteCompraCab,2),2,',','.') }} $/cab.</td>
+                        </tr>
                         
                     </tbody>
                 </table>
@@ -599,7 +619,7 @@
                 <span class="rp-section-title">COSTOS</span>
             </div>
             <div class="rp-section-body" style="display:block">
-
+                
                 <table class="financial-table">
                     <tbody>
                         <tr>

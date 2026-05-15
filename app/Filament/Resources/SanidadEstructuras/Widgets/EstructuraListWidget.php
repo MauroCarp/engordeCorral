@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\SanidadEstructuras\Widgets;
 
+use App\Models\Modelo;
 use App\Models\SanidadEstructura;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
@@ -13,7 +14,9 @@ use Filament\Widgets\TableWidget as BaseWidget;
 
 class EstructuraListWidget extends BaseWidget
 {
-    protected static ?string $heading = 'Registros de Estructura';
+    protected static ?string $heading = null;
+
+    private const SELECTED_MODELO_SESSION_KEY = 'selected_modelo_id';
 
     protected int | string | array $columnSpan = 'half';
 
@@ -29,6 +32,24 @@ class EstructuraListWidget extends BaseWidget
     public function refreshWidget()
     {
         $this->dispatch('$refresh');
+    }
+
+    protected function getTableHeading(): string | \Illuminate\Contracts\Support\Htmlable | null
+    {
+        $modeloId = session(self::SELECTED_MODELO_SESSION_KEY);
+        $modelo = $modeloId ? Modelo::find($modeloId) : Modelo::latest()->first();
+
+        if (! $modelo) {
+            return 'Registros de Estructura';
+        }
+
+        $capacidad = $modelo->capacidad_estructura;
+
+        if ($capacidad === null || $capacidad === '') {
+            return 'Registros de Estructura';
+        }
+
+        return 'Registros de Estructura | Capacidad: ' . $capacidad;
     }
 
     public function table(Table $table): Table

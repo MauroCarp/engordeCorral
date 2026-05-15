@@ -214,6 +214,16 @@ class ModeloForm
                                     ->step(0.1),
                             ]),
                     ]),
+                Section::make('Estructura')
+                        ->columns(1)
+                        ->schema([
+                            TextInput::make('capacidad')
+                                ->label('Capacidad')
+                                ->numeric()
+                                ->required()
+                                ->default(0)
+                                ->step(1),
+                        ]),
 
             ]);
     }

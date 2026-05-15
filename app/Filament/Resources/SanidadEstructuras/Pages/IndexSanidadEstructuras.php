@@ -6,6 +6,7 @@ use App\Filament\Resources\SanidadEstructuras\SanidadEstructuraResource;
 use App\Filament\Resources\SanidadEstructuras\Schemas\SanidadEstructuraForm;
 use App\Filament\Resources\SanidadEstructuras\Widgets\EstructuraListWidget;
 use App\Filament\Resources\SanidadEstructuras\Widgets\SanidadListWidget;
+use App\Models\Modelo;
 use Filament\Actions\CreateAction;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -14,11 +15,20 @@ use Filament\Resources\Pages\Page;
 
 class IndexSanidadEstructuras extends Page
 {
+    private const SELECTED_MODELO_SESSION_KEY = 'selected_modelo_id';
+
     protected static string $resource = SanidadEstructuraResource::class;
 
     public function getTitle(): string
     {
-        return 'Sanidad y Estructura';
+        $modeloId = session(self::SELECTED_MODELO_SESSION_KEY);
+        $modelo = $modeloId ? Modelo::find($modeloId) : Modelo::latest()->first();
+
+        if (! $modelo) {
+            return 'Sanidad y Estructura';
+        }
+
+        return 'Sanidad y Estructura - ' . ($modelo->nombre ?? ('Modelo #' . $modelo->id));
     }
 
     public function getView(): string

@@ -12,6 +12,7 @@ class SanidadEstructura extends Model
     protected $table = 'sanidad_estructuras';
 
     protected $fillable = [
+        'modelo_id',
         'tipo',
         'motivo',
         'costo_mes',
@@ -20,4 +21,9 @@ class SanidadEstructura extends Model
     protected $casts = [
         'costo_mes' => 'decimal:2',
     ];
+
+    public function modelo(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Modelo::class);
+    }
 }
