@@ -385,7 +385,7 @@
                             <td>
                                 <span class="rp-value">
                                     {{ number_format($modelo->peso_neto_entrada, 1, ',', '.') }}
-                                    <span class="rp-unit">$/Kg</span>
+                                    <span class="rp-unit">Kg/Cab</span>
                                 </span>
                             </td>
                         </tr>
@@ -394,7 +394,7 @@
                             <td>
                                 <span class="rp-value">
                                     {{ number_format($modelo->peso_neto_venta, 2, ',', '.') }}
-                                    <span class="rp-unit">Kg</span>
+                                    <span class="rp-unit">Kg/Ca</span>
                                 </span>
                             </td>
                         </tr>
@@ -456,21 +456,13 @@
                             </td>
                             <td>
                                <span class="rp-value">
-                                    @php
-                                       $kgMsCabDia = ($modelo->peso_neto_entrada == $modelo->peso_neto_venta) ? 0 : (($modelo->peso_neto_entrada + $modelo->peso_neto_venta) / 2) * $modelo->consumo_promedio_ms;
-                                    @endphp
-                                    {{ $kgMsCabDia }}
+                                                {{ number_format($kgMsCabDia, 2, ',', '.') }}
                                     <span class="rp-unit">Kg MS/Cab dia</span>
                                 </span> 
                             </td>
                             <td>
                                <span class="rp-value">
-                                    @php
-                                    //    $kgMvCabDia = $kgMsCabDia / %MS
-                                    @endphp
-                                    $kgMvCabDia = $kgMsCabDia / %MS
-
-                                    {{-- {{ $kgMvCabDia }} --}}
+                                    Pendiente definir %MS
                                     <span class="rp-unit">Kg MV/Cab dia</span>
                                 </span> 
                             </td>
@@ -492,20 +484,12 @@
                             </td>
                             <td>
                                 <span class="rp-value">
-                                    @php
-                                        $adpv = $kgMsCabDia / $modelo->eficiencia_conversion;
-                                    @endphp
                                     {{ number_format($adpv, 1, ',', '.') }}
                                     <span class="rp-unit">Kg ADPV</span>
                                 </span>
                             </td>
                             <td>
                                 <span class="rp-value">
-                                    @php
-                                        $diasEficiencia = ($modelo->peso_neto_venta == $modelo->peso_neto_entrada) ? 0 : ($modelo->peso_neto_venta - $modelo->peso_neto_entrada) / $adpv;
-
-                                        $mesesEficiencia = ($modelo->peso_neto_venta == $modelo->peso_neto_entrada) ? 0 : $diasEficiencia / 30;
-                                    @endphp
                                     {{ number_format($mesesEficiencia, 0, ',', '.') }}
                                     <span class="rp-unit">Meses</span>
                                 </span>
@@ -558,48 +542,35 @@
                             <td>Flete compra</td>
                             <td rowspan="2">{{ number_format($modelo->flete_compra_venta_precio,2,',','.') }} $/km</td>
                             <td>({{ number_format($modelo->flete_compra_km,0,',','.') }} km)</td>
-                            @php
-                                $fleteCompraCab = ($modelo->flete_compra_venta_precio * $modelo->flete_compra_km) / $modelo->cabezas_jaula_terneros;
-                            @endphp
-                            <td>$/kg {{ number_format(($fleteCompraCab / $modelo->peso_neto_entrada),2,',','.') }}</td>
+                            <td>$/kg {{ number_format($modelo->peso_neto_entrada > 0 ? ($fleteCompraCab / $modelo->peso_neto_entrada) : 0,2,',','.') }}</td>
                             <td>{{ number_format($fleteCompraCab,2,',','.') }} $/cab.</td>
                         </tr>
                         <tr>
                             <td>Flete venta</td>
                             <td>({{ number_format($modelo->flete_venta_km,0,',','.') }} km)</td>
-                            @php
-                                $fleteVentaCab = ($modelo->flete_compra_venta_precio * $modelo->flete_venta_km) / $modelo->cabezas_jaula_gordos;
-                            @endphp
-                            <td>$/kg {{ number_format($fleteVentaCab / $modelo->peso_neto_entrada,2,',','.') }}</td>
+                            <td>$/kg {{ number_format($modelo->peso_neto_entrada > 0 ? ($fleteVentaCab / $modelo->peso_neto_entrada) : 0,2,',','.') }}</td>
                             <td>{{ number_format($fleteVentaCab,2,',','.') }} $/cab.</td>
                         </tr>
                         <tr>
                             <td>Costo de compra (%)</td>
                             <td style="text-align: center;">{{ number_format($modelo->gastos_compra * 100, 2, ',', '.') }}%</td>
                             <td></td>
-                            @php
-                                $gastoCompraCab = $modelo->peso_neto_entrada * $modelo->precio_compra_ternero * $modelo->gastos_compra;
-                                        
-                            @endphp
                         {{-- @dd($modelo->peso_neto_entrada,$modelo->gastos_compra,$modelo->precio_compra_ternero) --}}
-                            <td>$/kg {{ number_format($gastoCompraCab / $modelo->peso_neto_entrada,2,',','.') }}</td>
+                            <td>$/kg {{ number_format($modelo->peso_neto_entrada > 0 ? ($gastoCompraCab / $modelo->peso_neto_entrada) : 0,2,',','.') }}</td>
                             <td>{{ number_format($gastoCompraCab,2,',','.') }} $/cab.</td>
                         </tr>
                         <tr>
                             <td>Costo de venta (%)</td>
                             <td style="text-align: center;">{{ number_format($modelo->gastos_venta * 100, 2, ',', '.') }}%</td>
                             <td></td>
-                            @php
-                                $gastoVentaCab = ($modelo->peso_neto_venta * ($modelo->mortandad + 1)) *$modelo->precio_venta_faena * $modelo->gastos_venta;
-                            @endphp
-                            <td>$/kg {{ number_format($gastoVentaCab / $modelo->peso_neto_venta,2,',','.') }}</td>
+                            <td>$/kg {{ number_format($modelo->peso_neto_venta > 0 ? ($gastoVentaCab / $modelo->peso_neto_venta) : 0,2,',','.') }}</td>
                             <td>{{ number_format($gastoVentaCab,2,',','.') }} $/cab.</td>
 
                         </tr>
                         <tr>
                             <td>Total Gastos de Comercializacion</td>
                             <td colspan="3"></td>
-                            <td>{{ number_format(ceil($gastoCompraCab + $gastoVentaCab + $fleteVentaCab + $fleteCompraCab),2,',','.') }} $/cab.</td>
+                            <td>{{ number_format(ceil($gastosComercializacion),2,',','.') }} $/cab.</td>
                         </tr>
                         
                     </tbody>
@@ -619,31 +590,17 @@
                 <span class="rp-section-title">COSTOS</span>
             </div>
             <div class="rp-section-body" style="display:block">
-               @php
-                    $totalEstructura = 0;
-                    foreach ($sanEst->estructura as $key => $value) {
-                        $totalEstructura += $value->costo_mes;
-                    }
-
-                    $costoAmort_estructura = $totalEstructura / 30.5 / $modelo->capacidad_estructura;
-
-                    $totalSanidad = 0;
-                    foreach ($sanEst->sanidad as $key => $value) {
-                        $totalSanidad += $value->costo_mes;
-                    }
-
-                @endphp
                 <table class="financial-table">
                     <tbody>
                         <tr>
                             <td>Costo Amortización / Estructura/Personal *</td>
                             <td style="text-align: right;">{{ number_format($costoAmort_estructura,2,',','.') }} $/día/cab</td>
-                            <td style="text-align: right;">{{ number_format(ceil($costoAmort_estructura * $diasEficiencia * (1 + ($modelo->mortandad/2))),2,',','.') }} $/cab.</td>
+                            <td style="text-align: right;">{{ number_format($costoAmortizacionCab,2,',','.') }} $/cab.</td>
                         </tr>
                         <tr>
                             <td>Costo Sanidad e identificación</td>
                             <td style="text-align: right;">$/cab {{ number_format($totalSanidad,2,',','.') }}</td>
-                            <td style="text-align: right;">{{ number_format(ceil($totalSanidad * ( 1 + $modelo->mortandad)),2,',','.') }} $/cab.</td>
+                            <td style="text-align: right;">{{ number_format($costoSanidadCab,2,',','.') }} $/cab.</td>
                         </tr>
                         <tr>
                             <td>Costo Alimentación</td>
@@ -657,11 +614,11 @@
                         </tr>
                         <tr>
                             <td colspan="2">Costo promedio/kg ganado</td>
-                            <td style="text-align: right;">2.272,80 $/kg</td>
+                            <td style="text-align: right;">{{ number_format($costoPromedioKgGanado,2,',','.') }} $/kg</td>
                         </tr>
                         <tr>
                             <td colspan="2">Valor ternero invernada</td>
-                            <td style="text-align: right;">$ {{ number_format($modelo->precio_compra_ternero * $modelo->peso_neto_entrada,2,',','.') }}</td>
+                            <td style="text-align: right;">$ {{ number_format($valorTerneroInvernada,2,',','.') }}</td>
                         </tr>
                         <tr>
                             <td colspan="2">Costos totales Engorde</td>
@@ -669,17 +626,16 @@
                         </tr>
                         <tr>
                             <td colspan="2">Gastos de comercialización</td>
-                            {{-- <td style="text-align: right;">$ {{ number_format($gastosComercializacion,2,',','.') }}</td> --}}
-                            <td style="text-align: right;">$ {{ number_format(ceil($gastoCompraCab + $gastoVentaCab + $fleteVentaCab + $fleteCompraCab),2,',','.') }}.</td>
+                            <td style="text-align: right;">$ {{ number_format(ceil($gastosComercializacion),2,',','.') }}.</td>
 
                         </tr>
                         <tr>
                             <td colspan="2">Valor ternero gordo</td>
-                            <td style="text-align: right;">$ {{ number_format($modelo->precio_venta_ternero * $modelo->peso_neto_venta * (1 - $modelo->mortandad),2,',','.') }}</td>
+                            <td style="text-align: right;">$ {{ number_format($valorTerneroGordo,2,',','.') }}</td>
                         </tr>
                         <tr class="total-row">
                             <td colspan="2" class="total-label">Utilidad <span class="highlight">antes de impuestos nacionales y provinciales</span> SIN costo financiero</td>
-                            <td class="highlight rp-value-accent" style="text-align: right;">$ 285.424,40</td>
+                            <td class="highlight rp-value-accent" style="text-align: right;">$ SUMA DE $valorTerneroInvernada $costoTotalEngorde $gastosComercializacion $valorTerneroInvernada</td>
                         </tr>
                     </tbody>
                 </table>
@@ -702,7 +658,7 @@
                 <div style="display: flex; justify-content: flex-end; align-items: center; gap: 1rem;">
                     <span class="rp-label" style="font-size: 0.8rem;">Tasa anual</span>
                     <span class="rp-value rp-value-amber highlight" style="padding: 0.5rem 1rem; border-radius: var(--r);">
-                        {{ number_format($modelo->tasa_anual, 2, ',', '.') }}%
+                        {{ number_format($modelo->tasa_anual * 100, 2, ',', '.') }}%
                     </span>
                 </div>
 
@@ -722,27 +678,31 @@
                             <td>Hacienda</td>
                             <td>{{ $modelo->plazo_compra_hacienda }} días</td>
                             <td>{{ $modelo->plazo_venta_hacienda }} días</td>
-                            <td>170 días</td>
-                            <td>12%</td>
-                            <td>$ 128.838,85</td>
+                            <td>{{ number_format($diasFinanciamientoHacienda,0) }} días</td>
+                            <td>{{ round($tasaAplicarHacienda) }}%</td>
+                            <td>$ {{ number_format($costoFinancieroHacienda,2,',','.') }}</td>
+
                         </tr>
                         <tr>
                             <td>Alimento</td>
-                            <td>(pago AB cada 15 días)</td>
-                            <td></td>
-                            <td>60 días</td>
-                            <td>4%</td>
-                            <td>$ 17.809,15</td>
+                            <td colspan="2">(pago AB cada 15 días)</td>
+                            <td>{{ $modelo->dias_financiamiento_alimento }} días</td>
+                            <td>{{ round($tasaAplicarAlimento) }}%</td>
+                            @php
+                                // $costoFinancieroAlimento = ($tasaAplicarAlimento / 100) * $costoAlimantacion;
+                                
+                            @endphp
+                            {{-- <td>$ {{ /*number_format(($tasaAplicarAlimento / 100) * $costoAlimantacion2,2,',','.') */}}</td> --}}
                         </tr>
                     </tbody>
                     <tfoot>
                         <tr class="total-row">
                             <td colspan="5" class="total-label">Costo financiero total</td>
-                            <td>$ 146.648,00</td>
+                            <td>$ SUMA $costoFinancieroHacienda y $costoFinancieroAlimento $</td>
                         </tr>
                         <tr class="total-row">
                             <td colspan="5" class="total-label">Utilidad <span class="highlight">antes de impuestos nacionales y provinciales</span> CON costo financiero</td>
-                            <td class="highlight" style="text-align: right;">$ 138.776,40</td>
+                            <td class="highlight" style="text-align: right;">$  $costoFinancieroHacienda + $costoFinanciero</td>
                         </tr>
                     </tfoot>
                 </table>

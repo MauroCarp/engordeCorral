@@ -59,6 +59,11 @@
             }
         </style>
         <div class="impacto-root">
+            @if (! $modelo)
+                <div style="padding: 1rem 0; color: var(--c-text-soft); font-weight: 600;">
+                    No hay un modelo seleccionado para calcular el impacto.
+                </div>
+            @else
             <table class="impact-table">
                 <thead>
                     <tr>
@@ -68,26 +73,27 @@
                 <tbody>
                     <tr>
                         <td class="label-cell">Compra invernada</td>
-                        <td class="value-cell">53,2%</td>
+                        <td class="value-cell">{{ number_format($impactoCompraInvernadaPct, 1, ',', '.') }}%</td>
                     </tr>
                     <tr>
                         <td class="label-cell">Alimentación</td>
-                        <td class="value-cell">22,2%</td>
+                        <td class="value-cell">{{ number_format($impactoAlimentacionPct, 1, ',', '.') }}%</td>
                     </tr>
                     <tr>
                         <td class="label-cell">Gastos de comercialización</td>
-                        <td class="value-cell">6,7%</td>
+                        <td class="value-cell">{{ number_format($impactoComercializacionPct, 1, ',', '.') }}%</td>
                     </tr>
                     <tr>
                         <td class="label-cell">Gastos de estructura</td>
-                        <td class="value-cell">3,0%</td>
+                        <td class="value-cell">{{ number_format($impactoEstructuraPct, 1, ',', '.') }}%</td>
                     </tr>
                     <tr>
                         <td class="label-cell">Sanidad e identificación</td>
-                        <td class="value-cell">0,4%</td>
+                        <td class="value-cell">{{ number_format($impactoSanidadPct, 1, ',', '.') }}%</td>
                     </tr>
                 </tbody>
             </table>
+            @endif
         </div>
     </x-filament::section>
 </x-filament-widgets::widget>
