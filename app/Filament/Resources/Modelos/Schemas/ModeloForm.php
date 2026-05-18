@@ -149,9 +149,9 @@ class ModeloForm
                                 Repeater::make('dieta')
                                     ->label('Composición de raciones')
                                     ->schema([
-                                        Select::make('nombre')
+                                        Select::make('racion_id')
                                             ->label('Ración')
-                                            ->options(fn (): array => Racion::query()->orderBy('nombre')->pluck('nombre', 'nombre')->all())
+                                            ->options(fn (): array => Racion::query()->orderBy('nombre')->pluck('nombre', 'id')->all())
                                             ->searchable()
                                             ->preload()
                                             ->disableOptionsWhenSelectedInSiblingRepeaterItems()
@@ -168,7 +168,7 @@ class ModeloForm
                                     ->columns(2)
                                     ->columnSpanFull()
                                     ->default([
-                                        ['nombre' => null, 'porcentaje' => 100],
+                                        ['racion_id' => null, 'porcentaje' => 100],
                                     ])
                                     ->minItems(1)
                                     ->reorderable(false)
