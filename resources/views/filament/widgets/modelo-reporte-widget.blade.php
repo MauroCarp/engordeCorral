@@ -377,7 +377,6 @@
                             <td>
                                 <span class="rp-value">
                                     {{ number_format($modelo->precio_venta_faena, 1, ',', '.') }}<span class="rp-unit">$/Kg</span>
-                                    <span class="rp-unit">$/Kg</span>
                                 </span>
                             </td>
                         </tr>
@@ -548,7 +547,7 @@
                         <tr>
                             <td>Flete venta</td>
                             <td>({{ number_format($modelo->flete_venta_km,0,',','.') }} km)</td>
-                            <td>$/kg {{ number_format($modelo->peso_neto_entrada > 0 ? ($fleteVentaCab / $modelo->peso_neto_entrada) : 0,2,',','.') }}</td>
+                            <td>$/kg {{ number_format($modelo->peso_neto_entrada > 0 ? ($fleteVentaCab / $modelo->peso_neto_venta) : 0,2,',','.') }}</td>
                             <td>{{ number_format($fleteVentaCab,2,',','.') }} $/cab.</td>
                         </tr>
                         <tr>
@@ -613,24 +612,30 @@
                             <td style="text-align: right;">500.015,6 $/cab.</td>
                         </tr>
                         <tr>
-                            <td colspan="2">Costo promedio/kg ganado</td>
+                            <td>Costo promedio/kg ganado</td>
+                            <td></td>
                             <td style="text-align: right;">{{ number_format($costoPromedioKgGanado,2,',','.') }} $/kg</td>
                         </tr>
                         <tr>
-                            <td colspan="2">Valor ternero invernada</td>
+                            <td>Valor ternero invernada</td>
+                            <td></td>
                             <td style="text-align: right;">$ {{ number_format($valorTerneroInvernada,2,',','.') }}</td>
                         </tr>
                         <tr>
-                            <td colspan="2">Costos totales Engorde</td>
+                            <td>Costos totales Engorde</td>
+                            <td></td>
                             {{-- <td style="text-align: right;">$ {{ number_format($costosTotalesEngorde,2,',','.') }}</td> --}}
+                            <td>SUMA DE LOS REGISTROS ANTERIORES</td>
                         </tr>
                         <tr>
-                            <td colspan="2">Gastos de comercialización</td>
+                            <td>Gastos de comercialización</td>
+                            <td></td>
                             <td style="text-align: right;">$ {{ number_format(ceil($gastosComercializacion),2,',','.') }}.</td>
 
                         </tr>
                         <tr>
-                            <td colspan="2">Valor ternero gordo</td>
+                            <td>Valor ternero gordo</td>
+                            <td></td>
                             <td style="text-align: right;">$ {{ number_format($valorTerneroGordo,2,',','.') }}</td>
                         </tr>
                         <tr class="total-row">
