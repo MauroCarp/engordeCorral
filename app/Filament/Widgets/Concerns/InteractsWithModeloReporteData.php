@@ -4,6 +4,7 @@ namespace App\Filament\Widgets\Concerns;
 
 use App\Models\Modelo;
 use App\Models\SanidadEstructura;
+use App\Support\ModeloDietaAnalisisCalculator;
 use App\Support\ModeloReporteCalculator;
 use Illuminate\Support\Collection;
 use stdClass;
@@ -19,6 +20,11 @@ trait InteractsWithModeloReporteData
 
     public stdClass $sanEst;
 
+    /**
+     * @var array{modelo:?Modelo,rows:array<int, array<string, float|string>>,averages:array<string, float>,rowCount:int}
+     */
+    public array $dietaAnalisis;
+
     public array $modeloOptions = [];
 
     protected function initializeModeloReporteState(bool $loadModeloOptions = false): void
@@ -28,6 +34,7 @@ trait InteractsWithModeloReporteData
             'estructura' => collect(),
             'sanidad' => collect(),
         ];
+        $this->dietaAnalisis = app(ModeloDietaAnalisisCalculator::class)->calculate(null);
 
         if ($loadModeloOptions) {
             $this->modeloOptions = Modelo::query()
@@ -60,14 +67,23 @@ trait InteractsWithModeloReporteData
         }
 
         $this->syncSanidadData($this->selectedModeloId);
+        $this->syncDietaAnalisisData();
     }
 
     /**
-     * @return array<string, float>
+     * @return array<string, mixed>
      */
     protected function getModeloReporteViewData(): array
     {
-        return app(ModeloReporteCalculator::class)->calculate($this->modelo, $this->sanEst);
+        return array_merge(
+            app(ModeloReporteCalculator::class)->calculate($this->modelo, $this->sanEst),
+            [
+                'dietaAnalisis' => $this->dietaAnalisis,
+                'dietaRows' => $this->dietaAnalisis['rows'],
+                'dietaAverages' => $this->dietaAnalisis['averages'],
+                'dietaRowCount' => $this->dietaAnalisis['rowCount'],
+            ],
+        );
     }
 
     private function syncSanidadData(?int $modeloId): void
@@ -82,6 +98,11 @@ trait InteractsWithModeloReporteData
             'estructura' => $agrupado->get('estructura', collect())->values(),
             'sanidad' => $agrupado->get('sanidad', collect())->values(),
         ];
+    }
+
+    private function syncDietaAnalisisData(): void
+    {
+        $this->dietaAnalisis = app(ModeloDietaAnalisisCalculator::class)->calculate($this->modelo);
     }
 
     private function getSelectedModeloSessionKey(): string
