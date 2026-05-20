@@ -27,7 +27,9 @@ class Dashboard extends BaseDashboard
                                 \App\Filament\Widgets\ImpactoCostosWidget::class,
                                 \App\Filament\Widgets\ImpactoCostosChartWidget::class,
                                 \App\Filament\Widgets\CostoEngordeWidget::class,
+                                \App\Filament\Widgets\CostoEngordeChartWidget::class,
                                 \App\Filament\Widgets\EstructuraCostoWidget::class,
+                                \App\Filament\Widgets\EstructuraCostoChartWidget::class,
                                 \App\Filament\Widgets\TasaMaizWidget::class,
                             ])),
                     ]),
@@ -55,6 +57,8 @@ class Dashboard extends BaseDashboard
             \App\Filament\Widgets\ImpactoCostosWidget::class,
             \App\Filament\Widgets\ImpactoCostosChartWidget::class,
             \App\Filament\Widgets\CostoEngordeWidget::class,
+            \App\Filament\Widgets\CostoEngordeChartWidget::class,
+            \App\Filament\Widgets\EstructuraCostoChartWidget::class,
             \App\Filament\Widgets\TasaMaizWidget::class,
         ];
     }
