@@ -47,6 +47,7 @@ class AdminPanelProvider extends PanelProvider
                 \App\Filament\Widgets\ImpactoCostosWidget::class,
                 \App\Filament\Widgets\CostoEngordeWidget::class,
                 \App\Filament\Widgets\TasaMaizWidget::class,
+                \App\Filament\Widgets\EstructuraCostoWidget::class,
             ])
             ->navigationItems([
                 NavigationItem::make('Nutrición')
