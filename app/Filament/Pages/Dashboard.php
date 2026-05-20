@@ -25,6 +25,7 @@ class Dashboard extends BaseDashboard
                         Grid::make(1)
                             ->schema($this->getWidgetsSchemaComponents([
                                 \App\Filament\Widgets\ImpactoCostosWidget::class,
+                                \App\Filament\Widgets\ImpactoCostosChartWidget::class,
                                 \App\Filament\Widgets\CostoEngordeWidget::class,
                                 \App\Filament\Widgets\EstructuraCostoWidget::class,
                                 \App\Filament\Widgets\TasaMaizWidget::class,
@@ -52,6 +53,7 @@ class Dashboard extends BaseDashboard
         return [
             \App\Filament\Widgets\ModeloReporteWidget::class,
             \App\Filament\Widgets\ImpactoCostosWidget::class,
+            \App\Filament\Widgets\ImpactoCostosChartWidget::class,
             \App\Filament\Widgets\CostoEngordeWidget::class,
             \App\Filament\Widgets\TasaMaizWidget::class,
         ];
