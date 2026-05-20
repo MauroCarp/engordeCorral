@@ -31,7 +31,7 @@
                 border-collapse: collapse;
             }
             .impact-table th {
-                text-align: center;
+                text-align: left;
                 padding: 1rem;
                 color: #ffffff;
                 font-weight: bold;

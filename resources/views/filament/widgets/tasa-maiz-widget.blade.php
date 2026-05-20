@@ -200,8 +200,8 @@
                     <tfoot>
                         <tr>
                             <td>Totales</td>
-                            <td data-total-col2 x-text="formatNumber(sumColumn2())">{{ $formatNumber($totals['column2']) }}</td>
-                            <td data-total-col3 x-text="formatNumber(sumColumn3())">{{ $formatNumber($totals['column3']) }}</td>
+                            <td data-total-col2 x-text="formatNumber(sumColumn2(),2)">{{ $formatNumber($totals['column2'],2) }}</td>
+                            <td data-total-col3 x-text="formatNumber(sumColumn3(),2)">{{ $formatNumber($totals['column3'],2) }}</td>
                             <td data-total-col4 x-text="formatNumber(totalPercentage(), 2) + '%'">{{ $formatNumber($totals['column4'], 2) }}%</td>
                         </tr>
                     </tfoot>

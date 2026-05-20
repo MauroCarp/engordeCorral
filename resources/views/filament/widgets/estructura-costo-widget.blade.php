@@ -11,9 +11,9 @@
                 border-collapse: collapse;
             }
             .estructura-costo-table th {
-                text-align: center;
+                text-align: left;
                 padding: 1rem;
-                color: #00bcd4;
+                color: #ffffff;
                 font-weight: bold;
                 font-size: 1.25rem;
                 border-bottom: 2px solid rgb(161, 161, 161);
@@ -53,11 +53,11 @@
             }
             .estructura-costo-table tfoot td {
                 font-weight: bold;
-                color: #ec4899;
+                color: #f59e0b;
                 font-size: 1.05rem;
             }
             .estructura-costo-table tfoot .label-cell {
-                color: #ec4899;
+                color: #f59e0b;
             }
         </style>
 
@@ -144,9 +144,9 @@
                 <tfoot>
                     <tr>
                         <td class="label-cell">Total Costo</td>
-                        <td class="pct-cell" style="color:#ec4899;">100,00%</td>
+                        <td class="pct-cell" style="color:#f59e0b;">100,00%</td>
                         <td></td>
-                        <td class="subtotal-money-cell" style="color:#ec4899;">$ {{ $fmt($total * $cab) }}</td>
+                        <td class="subtotal-money-cell" style="color:#f59e0b;">$ {{ $fmt($total * $cab) }}</td>
                     </tr>
                 </tfoot>
             </table>
