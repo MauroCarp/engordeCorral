@@ -1,5 +1,54 @@
 <x-filament-widgets::widget>
     <x-filament::section>
+        @php
+            $formatMoney = static fn (float $value): string => number_format($value, 2, ',', '.');
+            $formatPercent = static fn (float $value): string => number_format($value, 2, ',', '.') . '%';
+            $kgMsCabDia = (($modelo->peso_neto_entrada + $modelo->peso_neto_venta) / 2) * $modelo->consumo_promedio_ms;
+            
+            $kgMvCabDia = (float) ($kgMsCabDia / ($dietaAverages['porcentaje_ms'] / 100) ?? 0);
+
+            $costoAlimento = ($kgMvCabDia * $dietaAverages['costo_kg_tc']) * $diasEficiencia * (1 + ($modelo->mortandad / 2));
+            $costoSanidad = (float) ($costoSanidadCab ?? 0);
+            $costoFletes = (float) ($fleteCompraCab ?? 0) + (float) ($fleteVentaCab ?? 0);
+            $costoComercializacion = (float) ($gastoCompraCab ?? 0) + (float) ($gastoVentaCab ?? 0);
+            $costoEstructura = (float) ($costoAmortizacionCab ?? 0);
+
+            $subtotalA = $costoAlimento + $costoSanidad + $costoComercializacion + $costoFletes + $costoEstructura;
+            $subtotalB = $costoSanidad + $costoComercializacion + $costoFletes + $costoEstructura;
+
+            $rows = [
+                [
+                    'label' => 'Alimento',
+                    'value' => $costoAlimento,
+                    'percentA' => $subtotalA > 0 ? ($costoAlimento * 100) / $subtotalA : 0,
+                    'percentB' => null,
+                ],
+                [
+                    'label' => 'Sanidad',
+                    'value' => $costoSanidad,
+                    'percentA' => $subtotalA > 0 ? ($costoSanidad * 100) / $subtotalA : 0,
+                    'percentB' => $subtotalB > 0 ? ($costoSanidad * 100) / $subtotalB : 0,
+                ],
+                [
+                    'label' => 'Gs Comercialización',
+                    'value' => $costoComercializacion,
+                    'percentA' => $subtotalA > 0 ? ($costoComercializacion * 100) / $subtotalA : 0,
+                    'percentB' => $subtotalB > 0 ? ($costoComercializacion * 100) / $subtotalB : 0,
+                ],
+                [
+                    'label' => 'Fletes',
+                    'value' => $costoFletes,
+                    'percentA' => $subtotalA > 0 ? ($costoFletes * 100) / $subtotalA : 0,
+                    'percentB' => $subtotalB > 0 ? ($costoFletes * 100) / $subtotalB : 0,
+                ],
+                [
+                    'label' => 'Estructura',
+                    'value' => $costoEstructura,
+                    'percentA' => $subtotalA > 0 ? ($costoEstructura * 100) / $subtotalA : 0,
+                    'percentB' => $subtotalB > 0 ? ($costoEstructura * 100) / $subtotalB : 0,
+                ],
+            ];
+        @endphp
         <style>
             .costo-engorde-table {
                 width: 100%;
@@ -32,61 +81,51 @@
                 font-weight: bold;
             }
         </style>
-        <table class="costo-engorde-table">
-            <thead>
-                <tr class="header-row">
-                    <th>Costo de engorde</th>
-                    <th></th>
-                    <th>% A</th>
-                    <th>% B</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Alimento</td>
-                    <td><span id='costoAlimento'>433.356,0</span> $/cab.</td>
-                    <td>68,70%</td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Sanidad</td>
-                    <td><span id='costoSanidad'>7.145</span> $/cab.</td>
-                    <td>1,13%</td>
-                    <td>3,62%</td>
-                </tr>
-                <tr>
-                    <td>Gs Comercialización</td>
-                    <td>91.072,8 $/cab.</td>
-                    <td>14,44%</td>
-                    <td>46,12%</td>
-                </tr>
-                <tr>
-                    <td>Fletes</td>
-                    <td>39.727,18</td>
-                    <td>6,30%</td>
-                    <td>20,12%</td>
-                </tr>
-                <tr>
-                    <td>Estructura</td>
-                    <td><span id="costoEstructura">59.515</span> $/cab.</td>
-                    <td>9,43%</td>
-                    <td>30,14%</td>
-                </tr>
-            </tbody>
-            <tfoot>
-                <tr class="subtotal-row">
-                    <td>Subtotal A gastos C/aliment.</td>
-                    <td>630.815,6 $/cab.</td>
-                    <td>100,00%</td>
-                    <td></td>
-                </tr>
-                <tr class="subtotal-row">
-                    <td>Subtotal B costos S/aliment.</td>
-                    <td>197.459,6 $/cab.</td>
-                    <td></td>
-                    <td>100,00%</td>
-                </tr>
-            </tfoot>
-        </table>
+        @if (! $modelo)
+            <div style="color: #94a3b8; font-family: 'Instrument Sans', sans-serif;">
+                Seleccioná un modelo en el panel principal para ver el costo de engorde.
+            </div>
+        @else
+            <table class="costo-engorde-table">
+                <thead>
+                    <tr class="header-row">
+                        <th>Costo de engorde</th>
+                        <th></th>
+                        <th>% A</th>
+                        <th>% B</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($rows as $row)
+                        <tr>
+                            <td>{{ $row['label'] }}</td>
+                            <td>{{ $formatMoney((float) $row['value']) }} $/cab.</td>
+                            <td>{{ $formatPercent((float) $row['percentA']) }}</td>
+                            <td>
+                                @if ($row['percentB'] === null)
+                                    
+                                @else
+                                    {{ $formatPercent((float) $row['percentB']) }}
+                                @endif
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+                <tfoot>
+                    <tr class="subtotal-row">
+                        <td>Subtotal A gastos C/aliment.</td>
+                        <td>{{ $formatMoney($subtotalA) }} $/cab.</td>
+                        <td>{{ $formatPercent(100) }}</td>
+                        <td></td>
+                    </tr>
+                    <tr class="subtotal-row">
+                        <td>Subtotal B costos S/aliment.</td>
+                        <td>{{ $formatMoney($subtotalB) }} $/cab.</td>
+                        <td></td>
+                        <td>{{ $formatPercent(100) }}</td>
+                    </tr>
+                </tfoot>
+            </table>
+        @endif
     </x-filament::section>
 </x-filament-widgets::widget>
