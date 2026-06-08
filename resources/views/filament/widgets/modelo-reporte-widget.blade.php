@@ -312,6 +312,112 @@
         .rp-section-body   { grid-template-columns: 1fr; }
         .rp-section-body.cols-3 { grid-template-columns: 1fr; }
     }
+
+    /* ── Breakeven ───────────────────────────────────────── */
+    .rp-breakeven {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.25rem;
+        margin-top: 0.5rem;
+    }
+
+    .rp-breakeven-item {
+        display: flex;
+        align-items: center;
+        gap: 0.85rem;
+        flex: 1 1 280px;
+    }
+
+    .rp-breakeven-btn {
+        font-family: 'Instrument Sans', sans-serif;
+        font-size: 0.78rem;
+        font-weight: 600;
+        letter-spacing: 0.03em;
+        padding: 0.55rem 1rem;
+        border-radius: var(--r);
+        border: 1px solid var(--c-border);
+        background: var(--c-surface-2);
+        color: var(--c-heading);
+        cursor: pointer;
+        white-space: nowrap;
+        transition: border-color 0.15s, background 0.15s, opacity 0.15s;
+    }
+
+    .rp-breakeven-btn:hover:not(:disabled) {
+        border-color: var(--c-accent);
+        background: var(--c-accent-dim);
+        color: var(--c-accent);
+    }
+
+    .rp-breakeven-btn:disabled {
+        opacity: 0.55;
+        cursor: wait;
+    }
+
+    .rp-breakeven-btn--gordo:hover:not(:disabled) {
+        border-color: var(--c-green);
+        background: var(--c-green-dim);
+        color: var(--c-green);
+    }
+
+    .rp-breakeven-btn--invernada:hover:not(:disabled) {
+        border-color: var(--c-amber);
+        background: var(--c-amber-dim);
+        color: var(--c-amber);
+    }
+
+    .rp-breakeven-item--reset {
+        flex: 0 0 auto;
+        align-self: center;
+    }
+
+    .rp-breakeven-btn--reset:hover:not(:disabled) {
+        border-color: var(--c-muted);
+        background: rgba(255, 255, 255, 0.06);
+        color: var(--c-heading);
+    }
+
+    .rp-breakeven-result {
+        flex: 1;
+        min-width: 120px;
+        padding: 0.55rem 0.85rem;
+        border-radius: var(--r);
+        border: 1px solid var(--c-border);
+        background: rgba(255, 255, 255, 0.03);
+        font-family: 'DM Mono', monospace;
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: var(--c-heading);
+        text-align: center;
+    }
+
+    .rp-breakeven-result--active {
+        border-color: var(--c-accent);
+        background: var(--c-accent-dim);
+        color: var(--c-accent);
+    }
+
+    .rp-breakeven-result--gordo.rp-breakeven-result--active {
+        border-color: var(--c-green);
+        background: var(--c-green-dim);
+        color: var(--c-green);
+    }
+
+    .rp-breakeven-result--invernada.rp-breakeven-result--active {
+        border-color: var(--c-amber);
+        background: var(--c-amber-dim);
+        color: var(--c-amber);
+    }
+
+    .rp-breakeven-placeholder {
+        color: var(--c-muted);
+        font-weight: 400;
+        font-size: 0.75rem;
+    }
+
+    .rp-value-breakeven {
+        color: var(--c-accent);
+    }
 </style>
 
 <div class="reporte-root">
@@ -366,8 +472,8 @@
                         <tr>
                             <td>Precio Compra</td>
                             <td>
-                            <span class="rp-value">
-                                {{ number_format($modelo->precio_compra_ternero, 1, ',', '.') }}
+                            <span class="rp-value @if($breakevenInvernada !== null) rp-value-breakeven @endif">
+                                {{ number_format($modeloReporte->precio_compra_ternero, $breakevenInvernada !== null ? 2 : 1, ',', '.') }}
                                 <span class="rp-unit">$/Kg</span>
                             </span>
                             </td>
@@ -375,8 +481,8 @@
                         <tr>
                             <td>Precio Venta</td>
                             <td>
-                                <span class="rp-value">
-                                    {{ number_format($modelo->precio_venta_faena, 1, ',', '.') }}<span class="rp-unit">$/Kg</span>
+                                <span class="rp-value @if($breakevenGordo !== null) rp-value-breakeven @endif">
+                                    {{ number_format($modeloReporte->precio_venta_faena, $breakevenGordo !== null ? 2 : 1, ',', '.') }}<span class="rp-unit">$/Kg</span>
                                 </span>
                             </td>
                         </tr>
@@ -614,7 +720,9 @@
                             </td>
                             <td style="text-align: right;">
                                 @php
-                                    $costoAlimentacionCab = ($kgMvCabDia * $dietaAverages['costo_kg_tc']) * $diasEficiencia * (1 + ($modelo->mortandad / 2));
+                                    if (! $usaCalculoBreakeven) {
+                                        $costoAlimentacionCab = ($kgMvCabDia * $dietaAverages['costo_kg_tc']) * $diasEficiencia * (1 + ($modelo->mortandad / 2));
+                                    }
                                 @endphp
                                 {{ number_format($costoAlimentacionCab,1,',','.') }} $/día
                             </td>
@@ -622,7 +730,9 @@
                         <tr>
                             <td>Costos totales Engorde</td>
                             @php
-                                $costoTotalEngorde = $costoAmortizacionCab + $costoSanidadCab + $costoAlimentacionCab;
+                                $costoTotalEngorde = $usaCalculoBreakeven
+                                    ? $costoTotalEngordeCab
+                                    : $costoAmortizacionCab + $costoSanidadCab + $costoAlimentacionCab;
                             @endphp
                             <td style="text-align: right;">{{ number_format($costoTotalEngorde / $diasEficiencia,2,',','.') }} $/día</td>
                             <td style="text-align: right;">{{ number_format($costoTotalEngorde,2,',','.') }} $/cab.</td>
@@ -646,18 +756,16 @@
                         <tr>
                             <td>Valor ternero gordo</td>
                             <td></td>
-                            <td style="text-align: right;">$ {{ number_format($modelo->precio_venta_faena * $modelo->peso_neto_venta * (1 - $modelo->mortandad),2,',','.') }}</td>
+                            <td style="text-align: right;">$ {{ number_format($usaCalculoBreakeven ? $valorTerneroGordo : $modelo->precio_venta_faena * $modelo->peso_neto_venta * (1 - $modelo->mortandad),2,',','.') }}</td>
                         </tr>
                         <tr class="total-row">
                             <td colspan="2" class="total-label">Utilidad <span class="highlight">antes de impuestos nacionales y provinciales</span> SIN costo financiero</td>
                             @php
-                             $utilidadAntesImpuestos = ($modelo->precio_venta_faena * $modelo->peso_neto_venta * (1 - $modelo->mortandad))  - $gastosComercializacion - $costoTotalEngorde - $valorTerneroInvernada;
+                                $utilidadAntesImpuestos = $usaCalculoBreakeven
+                                    ? $utilidadSinCostoFinanciero
+                                    : $valorTerneroGordo - $gastosComercializacion - $costoTotalEngorde - $valorTerneroInvernada;
                             @endphp
-                            <td class="highlight rp-value-accent" style="text-align: right;">$ {{ 
-                            number_format($utilidadAntesImpuestos,2,',','.') 
-
-
-                             }} </td>
+                            <td class="highlight rp-value-accent" style="text-align: right;">$ {{ number_format($utilidadAntesImpuestos,2,',','.') }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -711,8 +819,9 @@
                             <td>{{ $modelo->dias_financiamiento_alimento }} días</td>
                             <td>{{ round($tasaAplicarAlimento) }}%</td>
                             @php
-                                $costoFinancieroAlimento = ($tasaAplicarAlimento / 100) * $costoAlimentacionCab;
-                                
+                                if (! $usaCalculoBreakeven) {
+                                    $costoFinancieroAlimento = ($tasaAplicarAlimento / 100) * $costoAlimentacionCab;
+                                }
                             @endphp
                             <td>$ {{ number_format($costoFinancieroAlimento,2,',','.') }}</td>
                         </tr>
@@ -720,18 +829,97 @@
                     <tfoot>
                         <tr class="total-row">
                             <td colspan="5" class="total-label">Costo financiero total</td>
-                            <td>$ {{ number_format($costoFinancieroHacienda + $costoFinancieroAlimento,2,',','.') }}</td>
+                            <td>$ {{ number_format($usaCalculoBreakeven ? $costoFinancieroTotal : $costoFinancieroHacienda + $costoFinancieroAlimento,2,',','.') }}</td>
                         </tr>
                         <tr class="total-row">
                             <td colspan="5" class="total-label">Utilidad <span class="highlight">antes de impuestos nacionales y provinciales</span> CON costo financiero</td>
-                            <td class="highlight" style="text-align: right;">$  {{ number_format($utilidadAntesImpuestos - ($costoFinancieroHacienda + $costoFinancieroAlimento),2,',','.') }}</td>
+                            <td class="highlight" style="text-align: right;">$ {{ number_format($usaCalculoBreakeven ? $utilidadConCostoFinanciero : $utilidadAntesImpuestos - ($costoFinancieroHacienda + $costoFinancieroAlimento),2,',','.') }}</td>
                         </tr>
                     </tfoot>
                 </table>
             </div>
         </div>
 
-     
+        {{-- Breakeven --}}
+        <div class="rp-section rp-grid-full">
+            <div class="rp-section-header">
+                <span class="rp-section-icon icon-amber">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                    </svg>
+                </span>
+                <span class="rp-section-title">Breakeven</span>
+            </div>
+            <div class="rp-section-body cols-1">
+                <div class="rp-breakeven">
+                    <div class="rp-breakeven-item">
+                        <button
+                            type="button"
+                            class="rp-breakeven-btn rp-breakeven-btn--invernada"
+                            wire:click="calcularBreakevenInvernada"
+                            wire:loading.attr="disabled"
+                            wire:target="calcularBreakevenInvernada"
+                        >
+                            <span wire:loading.remove wire:target="calcularBreakevenInvernada">Breakeven Invernada</span>
+                            <span wire:loading wire:target="calcularBreakevenInvernada">Calculando…</span>
+                        </button>
+                        <div @class([
+                            'rp-breakeven-result',
+                            'rp-breakeven-result--invernada',
+                            'rp-breakeven-result--active' => $breakevenInvernada !== null,
+                        ])>
+                            @if($breakevenInvernada !== null)
+                                {{ number_format($breakevenInvernada, 2, ',', '.') }}
+                                <span class="rp-unit">$/Kg</span>
+                            @else
+                                <span class="rp-breakeven-placeholder">—</span>
+                            @endif
+                        </div>
+                    </div>
+
+                    <div class="rp-breakeven-item">
+                        <button
+                            type="button"
+                            class="rp-breakeven-btn rp-breakeven-btn--gordo"
+                            wire:click="calcularBreakevenGordo"
+                            wire:loading.attr="disabled"
+                            wire:target="calcularBreakevenGordo"
+                        >
+                            <span wire:loading.remove wire:target="calcularBreakevenGordo">Breakeven Gordo</span>
+                            <span wire:loading wire:target="calcularBreakevenGordo">Calculando…</span>
+                        </button>
+                        <div @class([
+                            'rp-breakeven-result',
+                            'rp-breakeven-result--gordo',
+                            'rp-breakeven-result--active' => $breakevenGordo !== null,
+                        ])>
+                            @if($breakevenGordo !== null)
+                                {{ number_format($breakevenGordo, 2, ',', '.') }}
+                                <span class="rp-unit">$/Kg</span>
+                            @else
+                                <span class="rp-breakeven-placeholder">—</span>
+                            @endif
+                        </div>
+                    </div>
+
+                    <div class="rp-breakeven-item rp-breakeven-item--reset">
+                        <button
+                            type="button"
+                            class="rp-breakeven-btn rp-breakeven-btn--reset"
+                            wire:click="reestablecerBreakeven"
+                            wire:loading.attr="disabled"
+                            wire:target="reestablecerBreakeven"
+                            @disabled($breakevenGordo === null && $breakevenInvernada === null)
+                        >
+                            <span wire:loading.remove wire:target="reestablecerBreakeven">Reestablecer</span>
+                            <span wire:loading wire:target="reestablecerBreakeven">Reestableciendo…</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
     @endif
 
