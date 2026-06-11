@@ -540,6 +540,7 @@
                             </td>
                             <td>
                                 <span class="rp-value">
+
                                     {{ number_format($dietaAverages['costo_kg_tc'] / ($dietaAverages['porcentaje_ms'] / 100), 1, ',', '.') }}
                                     <span class="rp-unit">$/Kg(MS)</span>
                                 </span>

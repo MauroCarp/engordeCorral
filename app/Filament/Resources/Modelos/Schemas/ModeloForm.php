@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Modelos\Schemas;
 
 use App\Models\Racion;
+use App\Support\ModeloDietaJsonFields;
 use Closure;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\TextInput;
@@ -137,7 +138,7 @@ class ModeloForm
                         ->columns(2)
                         ->schema([
                             TextInput::make('mortandad')
-                                ->label('Mortandad')
+                                ->label('Mortandad (%)')
                                 ->numeric()
                                 ->required()
                                 ->default(0)
@@ -146,7 +147,8 @@ class ModeloForm
                         Section::make('Nutrición')
                             ->columns(2)
                             ->schema([
-                                Repeater::make('dieta')
+                                Repeater::make('dieta_json')
+                                    ->formatStateUsing(fn (mixed $state): array => ModeloDietaJsonFields::normalizeForForm($state))
                                     ->label('Composición de raciones')
                                     ->schema([
                                         Select::make('racion_id')
@@ -217,7 +219,7 @@ class ModeloForm
                 Section::make('Estructura')
                         ->columns(1)
                         ->schema([
-                            TextInput::make('capacidad')
+                            TextInput::make('capacidad_estructura')
                                 ->label('Capacidad')
                                 ->numeric()
                                 ->required()

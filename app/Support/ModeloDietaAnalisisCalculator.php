@@ -87,23 +87,46 @@ class ModeloDietaAnalisisCalculator
     }
 
     /**
-     * @return array<int, array{racion_id:int|string|null, porcentaje:float|int|string|null}>
+     * @return array<int, array{racion_id:int, porcentaje:float}>
      */
     private function normalizeDieta(Modelo $modelo): array
     {
-        $dieta = $modelo->dieta;
+        $dieta = ModeloDietaJsonFields::normalize($modelo->dieta_json);
 
-        if (is_string($dieta)) {
-            $decoded = json_decode($dieta, true);
-            $dieta = is_array($decoded) ? $decoded : [];
-        }
+        $racionesPorNombre = Racion::query()
+            ->whereIn(
+                'nombre',
+                collect($dieta)
+                    ->pluck('nombre')
+                    ->filter(static fn (mixed $nombre): bool => filled($nombre))
+                    ->map(static fn (mixed $nombre): string => (string) $nombre)
+                    ->unique()
+                    ->values()
+                    ->all(),
+            )
+            ->pluck('id', 'nombre');
 
-        if (! is_array($dieta) && array_key_exists('dieta_json', $modelo->getAttributes())) {
-            $decoded = json_decode((string) $modelo->getAttribute('dieta_json'), true);
-            $dieta = is_array($decoded) ? $decoded : [];
-        }
+        return collect($dieta)
+            ->map(function (array $item) use ($racionesPorNombre): ?array {
+                $racionId = $item['racion_id'] ?? null;
+                $porcentaje = (float) ($item['porcentaje'] ?? 0);
 
-        return is_array($dieta) ? $dieta : [];
+                if (! filled($racionId) && filled($item['nombre'] ?? null)) {
+                    $racionId = $racionesPorNombre->get((string) $item['nombre']);
+                }
+
+                if (! filled($racionId) || $porcentaje <= 0) {
+                    return null;
+                }
+
+                return [
+                    'racion_id' => (int) $racionId,
+                    'porcentaje' => $porcentaje,
+                ];
+            })
+            ->filter()
+            ->values()
+            ->all();
     }
 
     /**

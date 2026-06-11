@@ -11,6 +11,7 @@ use App\Filament\Resources\Modelos\Tables\ModelosTable;
 use Filament\Infolists\Components\Section;
 use App\Models\Modelo;
 use App\Models\SanidadEstructura;
+use App\Support\ModeloPercentageFields;
 use BackedEnum;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Resource; 
@@ -95,6 +96,7 @@ class ModeloResource extends Resource
                     ->schema([
                         Infolists\Components\TextEntry::make('tasa_anual')
                             ->label('Tasa Anual')
+                            ->formatStateUsing(fn ($state) => ModeloPercentageFields::toDisplay($state))
                             ->numeric(
                                 decimalPlaces: 0,
                                 decimalSeparator: ',',
@@ -178,6 +180,7 @@ class ModeloResource extends Resource
 
                         Infolists\Components\TextEntry::make('gastos_compra')
                             ->label('Gastos de compra')
+                            ->formatStateUsing(fn ($state) => ModeloPercentageFields::toDisplay($state))
                             ->numeric(
                                 decimalPlaces: 0,
                                 decimalSeparator: ',',
@@ -188,6 +191,7 @@ class ModeloResource extends Resource
 
                         Infolists\Components\TextEntry::make('gastos_venta')
                             ->label('Gastos de venta')
+                            ->formatStateUsing(fn ($state) => ModeloPercentageFields::toDisplay($state))
                             ->numeric(
                                 decimalPlaces: 0,
                                 decimalSeparator: ',',
@@ -204,6 +208,7 @@ class ModeloResource extends Resource
                             ->schema([
                                 Infolists\Components\TextEntry::make('mortandad')
                                     ->label('Mortandad')
+                                    ->formatStateUsing(fn ($state) => ModeloPercentageFields::toDisplay($state))
                                     ->numeric(
                                         decimalPlaces: 1,
                                         decimalSeparator: ',',
@@ -228,6 +233,7 @@ class ModeloResource extends Resource
 
                                 Infolists\Components\TextEntry::make('consumo_promedio_ms')
                                     ->label('Consumo Promedio MS en Terminación')
+                                    ->formatStateUsing(fn ($state) => ModeloPercentageFields::toDisplay($state))
                                     ->numeric(
                                         decimalPlaces: 1,
                                         decimalSeparator: ',',

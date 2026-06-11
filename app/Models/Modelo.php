@@ -8,7 +8,7 @@ class Modelo extends Model
 {
     protected $fillable = [
         'nombre',
-        'dieta',
+        'dieta_json',
         'precio_venta_faena',
         'precio_compra_ternero',
         'precio_alimento_balanceado',
@@ -32,7 +32,7 @@ class Modelo extends Model
     ];
 
     protected $casts = [
-        'dieta'                         => 'array',
+        'dieta_json'                   => 'array',
         'precio_venta_faena'           => 'decimal:2',
         'precio_compra_ternero'        => 'decimal:2',
         'precio_alimento_balanceado'   => 'decimal:2',
@@ -47,6 +47,6 @@ class Modelo extends Model
         'gastos_compra'                => 'decimal:4',
         'gastos_venta'                 => 'decimal:4',
         'tasa_anual'                   => 'decimal:4',
-        'capacidad'                    => 'integer',
+        'capacidad_estructura'         => 'integer',
     ];
 }
