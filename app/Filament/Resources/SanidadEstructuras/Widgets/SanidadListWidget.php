@@ -48,12 +48,12 @@ class SanidadListWidget extends BaseWidget
                     // ->money('ARS',false,false,0)
                     ->sortable()
                     ->prefix('$')
-                    ->numeric(decimalPlaces: 1, decimalSeparator: ',', thousandsSeparator: '.')
+                    ->numeric(decimalPlaces: 0, decimalSeparator: ',', thousandsSeparator: '.')
                     ->summarize([
                         \Filament\Tables\Columns\Summarizers\Sum::make()
                             // ->money('ARS',false,false,0)
                             ->prefix('$')
-                            ->numeric(decimalPlaces: 1, decimalSeparator: ',', thousandsSeparator: '.')
+                            ->numeric(decimalPlaces: 0, decimalSeparator: ',', thousandsSeparator: '.')
                             ->label('Total $/Cab'),
                     ]),
             ])
