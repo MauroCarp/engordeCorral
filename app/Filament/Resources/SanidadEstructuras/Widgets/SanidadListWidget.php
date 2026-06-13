@@ -45,11 +45,15 @@ class SanidadListWidget extends BaseWidget
 
                 TextColumn::make('costo_mes')
                     ->label('$/Cab')
-                    ->money('ARS',false,false,0)
+                    // ->money('ARS',false,false,0)
                     ->sortable()
+                    ->prefix('$')
+                    ->numeric(decimalPlaces: 1, decimalSeparator: ',', thousandsSeparator: '.')
                     ->summarize([
                         \Filament\Tables\Columns\Summarizers\Sum::make()
-                            ->money('ARS',false,false,0)
+                            // ->money('ARS',false,false,0)
+                            ->prefix('$')
+                            ->numeric(decimalPlaces: 1, decimalSeparator: ',', thousandsSeparator: '.')
                             ->label('Total $/Cab'),
                     ]),
             ])

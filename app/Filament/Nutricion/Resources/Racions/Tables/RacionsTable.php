@@ -29,11 +29,15 @@ class RacionsTable
                     ->sortable(),
                 TextColumn::make('costo_kg_tc')
                     ->label('$/Kg TC')
-                    ->money('ARS', divideBy: 1)
+                    // ->money('ARS', divideBy: 1)
+                    ->prefix('$')
+                    ->numeric(decimalPlaces: 1, decimalSeparator: ',', thousandsSeparator: '.')
                     ->sortable(),
                 TextColumn::make('costo_kg_ms')
                     ->label('$/Kg MS')
-                    ->money('ARS', divideBy: 1)
+                    // ->money('ARS', divideBy: 1)
+                    ->prefix('$')
+                    ->numeric(decimalPlaces: 1, decimalSeparator: ',', thousandsSeparator: '.')
                     ->sortable(),
             ])
             ->filters([

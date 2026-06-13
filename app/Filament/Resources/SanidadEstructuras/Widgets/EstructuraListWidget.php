@@ -64,11 +64,13 @@ class EstructuraListWidget extends BaseWidget
 
                 TextColumn::make('costo_mes')
                     ->label('Costo por Mes')
-                    ->money('ARS',false,false,0)
+                    ->prefix('$')
+                    ->numeric(decimalPlaces: 1, decimalSeparator: ',', thousandsSeparator: '.')
                     ->sortable()
                     ->summarize([
                         \Filament\Tables\Columns\Summarizers\Sum::make()
-                            ->money('ARS',false,false,0)
+                                ->prefix('$')
+                            ->numeric(decimalPlaces: 1, decimalSeparator: ',', thousandsSeparator: '.')
                             ->label('Total $/Mes'),
                     ]),
 
