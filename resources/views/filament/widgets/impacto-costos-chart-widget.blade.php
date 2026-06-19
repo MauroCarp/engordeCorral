@@ -1,6 +1,8 @@
 <x-filament-widgets::widget>
     <x-filament::section>
+        <x-filament.widgets.partials.dashboard-widget-shell>
         <div
+            wire:key="impacto-costos-chart-{{ $widgetRefreshKey ?? 0 }}"
             style="font-family: 'Instrument Sans', sans-serif; color: #e2e8f0; padding: 0rem 2rem 2rem 2rem;"
             x-data="{
                 chart: null,
@@ -94,6 +96,7 @@
                 </div>
             @endif
         </div>
+        </x-filament.widgets.partials.dashboard-widget-shell>
 
     </x-filament::section>
 </x-filament-widgets::widget>

@@ -7,6 +7,7 @@ use App\Models\Modelo;
 use App\Models\SanidadEstructura;
 use App\Support\SelectedModeloResolver;
 use Filament\Widgets\Widget;
+use Livewire\Attributes\On;
 
 class TasaMaizWidget extends Widget
 {
@@ -15,10 +16,6 @@ class TasaMaizWidget extends Widget
     protected int | string | array $columnSpan = 'full';
 
     protected static ?int $sort = 4;
-
-    protected $listeners = [
-        'modeloSeleccionado' => 'handleModeloSeleccionado',
-    ];
 
     public ?Modelo $modelo = null;
 
@@ -40,15 +37,33 @@ class TasaMaizWidget extends Widget
         'column4' => 0.0,
     ];
 
+    public int $widgetRefreshKey = 0;
+
     public function mount(): void
     {
         $modeloId = SelectedModeloResolver::resolveId();
         $this->setSelectedModelo($modeloId, fallbackToLatest: true);
     }
 
+    #[On('modeloSeleccionado')]
     public function handleModeloSeleccionado(?int $modeloId = null): void
     {
-        $this->setSelectedModelo($modeloId);
+        $this->refreshDashboardWidgets($modeloId);
+    }
+
+    #[On('refresh-dashboard-widgets')]
+    public function refreshDashboardWidgets(?int $modeloId = null): void
+    {
+        $this->setSelectedModelo(
+            $modeloId ?? SelectedModeloResolver::resolveId(),
+            fallbackToLatest: $modeloId === null,
+        );
+        $this->widgetRefreshKey++;
+    }
+
+    public function refreshDashboardWidget(): void
+    {
+        $this->refreshDashboardWidgets(SelectedModeloResolver::resolveId());
     }
 
     private function setSelectedModelo(?int $modeloId, bool $fallbackToLatest = false): void

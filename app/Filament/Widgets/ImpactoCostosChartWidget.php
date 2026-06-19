@@ -15,18 +15,9 @@ class ImpactoCostosChartWidget extends Widget
 
     protected static ?int $sort = 3;
 
-    protected $listeners = [
-        'modeloSeleccionado' => 'handleModeloSeleccionado',
-    ];
-
     public function mount(): void
     {
         $this->initializeModeloReporteState();
-    }
-
-    public function handleModeloSeleccionado(?int $modeloId = null): void
-    {
-        $this->setSelectedModelo($modeloId);
     }
 
     protected function getViewData(): array

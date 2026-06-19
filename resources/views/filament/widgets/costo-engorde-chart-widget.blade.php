@@ -1,5 +1,6 @@
 <x-filament-widgets::widget>
     <x-filament::section>
+        <x-filament.widgets.partials.dashboard-widget-shell>
         @php
             $kgMsCabDia  = (($modelo?->peso_neto_entrada + $modelo?->peso_neto_venta) / 2) * ($modelo?->consumo_promedio_ms ?? 0);
             $kgMvCabDia  = ($dietaAverages['porcentaje_ms'] ?? 0) > 0
@@ -20,6 +21,7 @@
         @endphp
 
         <div
+            wire:key="costo-engorde-chart-{{ $widgetRefreshKey ?? 0 }}"
             style="font-family: 'Instrument Sans', sans-serif; color: #e2e8f0; padding: 0rem 2rem 2rem 2rem;"
             x-data="{
                 chartA: null,
@@ -149,6 +151,7 @@
                 </div>
             @endif
         </div>
+        </x-filament.widgets.partials.dashboard-widget-shell>
     </x-filament::section>
 </x-filament-widgets::widget>
 

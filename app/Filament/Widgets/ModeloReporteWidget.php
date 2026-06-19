@@ -35,7 +35,7 @@ class ModeloReporteWidget extends Widget
         $this->breakevenGordo = null;
         $this->breakevenInvernada = null;
 
-        $this->dispatch('modeloSeleccionado', modeloId: $this->selectedModeloId);
+        $this->dispatch('refresh-dashboard-widgets', modeloId: $value ? (int) $value : null);
     }
 
     /**

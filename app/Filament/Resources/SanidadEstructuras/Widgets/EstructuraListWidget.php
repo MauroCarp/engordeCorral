@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\SanidadEstructuras\Widgets;
 
+use App\Filament\Resources\SanidadEstructuras\Support\SanidadEstructuraTableActions;
 use App\Models\SanidadEstructura;
 use App\Support\SelectedModeloResolver;
 use Filament\Actions\BulkActionGroup;
@@ -76,6 +77,10 @@ class EstructuraListWidget extends BaseWidget
                     ]),
             ])
             ->actions([
+                SanidadEstructuraTableActions::editCostoAction(
+                    'Editar costo de Estructura',
+                    fn () => $this->refreshWidget(),
+                ),
                 DeleteAction::make()
                     ->requiresConfirmation()
                     ->modalHeading('Eliminar Registro de Estructura')

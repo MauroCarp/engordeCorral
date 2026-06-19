@@ -1,5 +1,6 @@
 <x-filament-widgets::widget>
     <x-filament::section>
+        <x-filament.widgets.partials.dashboard-widget-shell>
         <style>
             .estructura-costo-root {
                 font-family: 'Instrument Sans', sans-serif;
@@ -152,5 +153,6 @@
             </table>
             @endif
         </div>
+        </x-filament.widgets.partials.dashboard-widget-shell>
     </x-filament::section>
 </x-filament-widgets::widget>

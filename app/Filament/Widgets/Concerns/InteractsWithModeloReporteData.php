@@ -8,6 +8,7 @@ use App\Support\ModeloDietaAnalisisCalculator;
 use App\Support\ModeloReporteCalculator;
 use App\Support\SelectedModeloResolver;
 use Illuminate\Support\Collection;
+use Livewire\Attributes\On;
 use stdClass;
 
 trait InteractsWithModeloReporteData
@@ -27,6 +28,8 @@ trait InteractsWithModeloReporteData
     public array $dietaAnalisis;
 
     public array $modeloOptions = [];
+
+    public int $widgetRefreshKey = 0;
 
     protected function initializeModeloReporteState(bool $loadModeloOptions = false): void
     {
@@ -69,6 +72,27 @@ trait InteractsWithModeloReporteData
 
         $this->syncSanidadData($this->selectedModeloId);
         $this->syncDietaAnalisisData();
+    }
+
+    #[On('modeloSeleccionado')]
+    public function handleModeloSeleccionado(?int $modeloId = null): void
+    {
+        $this->refreshDashboardWidgets($modeloId);
+    }
+
+    #[On('refresh-dashboard-widgets')]
+    public function refreshDashboardWidgets(?int $modeloId = null): void
+    {
+        $this->setSelectedModelo(
+            $modeloId ?? SelectedModeloResolver::resolveId(),
+            fallbackToLatest: $modeloId === null,
+        );
+        $this->widgetRefreshKey++;
+    }
+
+    public function refreshDashboardWidget(): void
+    {
+        $this->refreshDashboardWidgets(SelectedModeloResolver::resolveId());
     }
 
     /**

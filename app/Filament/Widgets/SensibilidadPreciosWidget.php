@@ -16,10 +16,6 @@ class SensibilidadPreciosWidget extends Widget
 
     protected static ?int $sort = 2;
 
-    protected $listeners = [
-        'modeloSeleccionado' => 'handleModeloSeleccionado',
-    ];
-
     /** Porcentajes de variación para el eje de columnas (precio gordo). El 0 es fijo. */
     public array $colPcts = [-10, -5, 0, 5, 10];
 
@@ -29,11 +25,6 @@ class SensibilidadPreciosWidget extends Widget
     public function mount(): void
     {
         $this->initializeModeloReporteState();
-    }
-
-    public function handleModeloSeleccionado(?int $modeloId = null): void
-    {
-        $this->setSelectedModelo($modeloId);
     }
 
     protected function getViewData(): array

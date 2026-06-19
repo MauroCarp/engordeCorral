@@ -1,4 +1,6 @@
 <x-filament-widgets::widget>
+<x-filament.widgets.partials.dashboard-widget-shell class="sp-root">
+
 <style>
 .sp-root {
     --c-bg:        #0f1117;
@@ -287,5 +289,5 @@
         </table>
     </div>
     @endif
-</div>
+</x-filament.widgets.partials.dashboard-widget-shell>
 </x-filament-widgets::widget>

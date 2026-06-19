@@ -1,5 +1,6 @@
 <x-filament-widgets::widget>
     <x-filament::section>
+        <x-filament.widgets.partials.dashboard-widget-shell>
         <style>
             .impacto-root {
                 --c-bg:          #0f1117;
@@ -95,5 +96,6 @@
             </table>
             @endif
         </div>
+        </x-filament.widgets.partials.dashboard-widget-shell>
     </x-filament::section>
 </x-filament-widgets::widget>
