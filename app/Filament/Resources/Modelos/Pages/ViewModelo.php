@@ -27,9 +27,16 @@ class ViewModelo extends ViewRecord
     {
         $modelo = $this->record;
         
-        // Obtener costos de sanidad y estructura
-        $costoSanidad = SanidadEstructura::where('tipo', 'sanidad')->sum('costo_mes');
-        $costoEstructura = SanidadEstructura::where('tipo', 'estructura')->sum('costo_mes');
+        // Obtener costos de sanidad y estructura del modelo actual
+        $costoSanidad = SanidadEstructura::query()
+            ->where('modelo_id', $modelo->id)
+            ->where('tipo', 'sanidad')
+            ->sum('costo_mes');
+
+        $costoEstructura = SanidadEstructura::query()
+            ->where('modelo_id', $modelo->id)
+            ->where('tipo', 'estructura')
+            ->sum('costo_mes');
         
         return $this->calcularMetricas($modelo, $costoSanidad, $costoEstructura);
     }

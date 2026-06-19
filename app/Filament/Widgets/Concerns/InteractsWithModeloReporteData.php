@@ -6,6 +6,7 @@ use App\Models\Modelo;
 use App\Models\SanidadEstructura;
 use App\Support\ModeloDietaAnalisisCalculator;
 use App\Support\ModeloReporteCalculator;
+use App\Support\SelectedModeloResolver;
 use Illuminate\Support\Collection;
 use stdClass;
 
@@ -43,7 +44,7 @@ trait InteractsWithModeloReporteData
                 ->toArray();
         }
 
-        $sessionModeloId = session($this->getSelectedModeloSessionKey());
+        $sessionModeloId = session(SelectedModeloResolver::SESSION_KEY);
 
         $this->setSelectedModelo($sessionModeloId ? (int) $sessionModeloId : null, fallbackToLatest: true);
     }
@@ -61,9 +62,9 @@ trait InteractsWithModeloReporteData
         $this->selectedModeloId = $this->modelo?->id;
 
         if ($this->selectedModeloId) {
-            session([$this->getSelectedModeloSessionKey() => $this->selectedModeloId]);
+            SelectedModeloResolver::set($this->selectedModeloId);
         } else {
-            session()->forget($this->getSelectedModeloSessionKey());
+            SelectedModeloResolver::set(null);
         }
 
         $this->syncSanidadData($this->selectedModeloId);
@@ -103,10 +104,5 @@ trait InteractsWithModeloReporteData
     private function syncDietaAnalisisData(): void
     {
         $this->dietaAnalisis = app(ModeloDietaAnalisisCalculator::class)->calculate($this->modelo);
-    }
-
-    private function getSelectedModeloSessionKey(): string
-    {
-        return 'selected_modelo_id';
     }
 }

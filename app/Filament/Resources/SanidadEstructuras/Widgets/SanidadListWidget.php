@@ -3,15 +3,13 @@
 namespace App\Filament\Resources\SanidadEstructuras\Widgets;
 
 use App\Models\SanidadEstructura;
+use App\Support\SelectedModeloResolver;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
-use Filament\Support\Facades\FilamentView;
-use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
-use Illuminate\Database\Eloquent\Builder;
 
 class SanidadListWidget extends BaseWidget
 {
@@ -19,24 +17,29 @@ class SanidadListWidget extends BaseWidget
 
     protected int | string | array $columnSpan = 'half';
 
-    // Polling automático cada 30 segundos
     protected string | array $poll = '30s';
 
-    // Listeners para eventos de refresh
     protected $listeners = [
         '$refresh' => 'refreshWidget',
         'refreshSanidadWidget' => 'refreshWidget',
     ];
 
-    public function refreshWidget()
+    public function refreshWidget(): void
     {
         $this->dispatch('$refresh');
     }
 
     public function table(Table $table): Table
     {
+        $modeloId = SelectedModeloResolver::resolveId();
+
         return $table
-            ->query(SanidadEstructura::query()->where('tipo', 'sanidad'))
+            ->query(
+                SanidadEstructura::query()
+                    ->where('tipo', 'sanidad')
+                    ->when($modeloId, fn ($query) => $query->where('modelo_id', $modeloId))
+                    ->when(! $modeloId, fn ($query) => $query->whereRaw('1 = 0')),
+            )
             ->columns([
                 TextColumn::make('motivo')
                     ->label('Motivo')
@@ -45,13 +48,11 @@ class SanidadListWidget extends BaseWidget
 
                 TextColumn::make('costo_mes')
                     ->label('$/Cab')
-                    // ->money('ARS',false,false,0)
                     ->sortable()
                     ->prefix('$')
                     ->numeric(decimalPlaces: 0, decimalSeparator: ',', thousandsSeparator: '.')
                     ->summarize([
                         \Filament\Tables\Columns\Summarizers\Sum::make()
-                            // ->money('ARS',false,false,0)
                             ->prefix('$')
                             ->numeric(decimalPlaces: 0, decimalSeparator: ',', thousandsSeparator: '.')
                             ->label('Total $/Cab'),
@@ -78,7 +79,7 @@ class SanidadListWidget extends BaseWidget
                 ]),
             ])
             ->emptyStateHeading('No hay registros de Sanidad')
-            ->emptyStateDescription('Crea el primer registro de sanidad desde el botón "Nuevo Registro".')
+            ->emptyStateDescription('Seleccione un modelo y sincronice motivos o cree un registro desde "Nuevo Registro".')
             ->paginated(false)
             ->searchable(false);
     }
