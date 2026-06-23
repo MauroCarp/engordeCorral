@@ -161,13 +161,13 @@
     /* ── Sections grid ───────────────────────────────────── */
     .rp-grid {
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 1.25rem;
     }
 
-    .rp-grid-full {
+    /* .rp-grid-full {
         grid-column: 1 / -1;
-    }
+    } */
 
     /* ── Section card ────────────────────────────────────── */
     .rp-section {
@@ -459,7 +459,7 @@
     <div class="rp-grid">
 
         {{-- Mercado --}}
-        <div class="rp-section rp-grid-full">
+        <div class="rp-section">
             <div class="rp-section-header">
                 <span class="rp-section-icon icon-blue">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -513,7 +513,7 @@
         </div>
 
         {{-- Nutrición --}}
-        <div class="rp-section rp-grid-full">
+        <div class="rp-section">
             <div class="rp-section-header">
                 <span class="rp-section-icon icon-violet">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -632,10 +632,9 @@
                 </table>
             </div>
         </div>
-        </div>
 
            {{-- Comercialización (full width) --}}
-        <div class="rp-section rp-grid-full">
+        <div class="rp-section">
             <div class="rp-section-header">
                 <span class="rp-section-icon icon-amber">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -695,7 +694,7 @@
         </div>
 
         {{-- COSTO --}}
-        <div class="rp-section rp-grid-full">
+        <div class="rp-section">
             <div class="rp-section-header">
                 <span class="rp-section-icon icon-blue">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -779,7 +778,7 @@
         </div>
 
         {{-- Financiero --}}
-        <div class="rp-section rp-grid-full">
+        <div class="rp-section">
             <div class="rp-section-header">
                 <span class="rp-section-icon icon-green">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -843,83 +842,81 @@
                     </tfoot>
                 </table>
             </div>
-        </div>
-
-        {{-- Breakeven --}}
-        <div class="rp-section rp-grid-full">
-            <div class="rp-section-header">
-                <span class="rp-section-icon icon-amber">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
-                    </svg>
-                </span>
-                <span class="rp-section-title">Breakeven</span>
-            </div>
-            <div class="rp-section-body cols-1">
-                <div class="rp-breakeven">
-                    <div class="rp-breakeven-item">
-                        <button
-                            type="button"
-                            class="rp-breakeven-btn rp-breakeven-btn--invernada"
-                            wire:click="calcularBreakevenInvernada"
-                            wire:loading.attr="disabled"
-                            wire:target="calcularBreakevenInvernada"
-                        >
-                            <span wire:loading.remove wire:target="calcularBreakevenInvernada">Breakeven Invernada</span>
-                            <span wire:loading wire:target="calcularBreakevenInvernada">Calculando…</span>
-                        </button>
-                        <div @class([
-                            'rp-breakeven-result',
-                            'rp-breakeven-result--invernada',
-                            'rp-breakeven-result--active' => $breakevenInvernada !== null,
-                        ])>
-                            @if($breakevenInvernada !== null)
-                                {{ number_format($breakevenInvernada, 2, ',', '.') }}
-                                <span class="rp-unit">$/Kg</span>
-                            @else
-                                <span class="rp-breakeven-placeholder">—</span>
-                            @endif
+            <div class="rp-section">
+                <div class="rp-section-header">
+                    <span class="rp-section-icon icon-amber">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                        </svg>
+                    </span>
+                    <span class="rp-section-title">Breakeven</span>
+                </div>
+                <div class="rp-section-body cols-1">
+                    <div class="rp-breakeven">
+                        <div class="rp-breakeven-item">
+                            <button
+                                type="button"
+                                class="rp-breakeven-btn rp-breakeven-btn--invernada"
+                                wire:click="calcularBreakevenInvernada"
+                                wire:loading.attr="disabled"
+                                wire:target="calcularBreakevenInvernada"
+                            >
+                                <span wire:loading.remove wire:target="calcularBreakevenInvernada">Breakeven Invernada</span>
+                                <span wire:loading wire:target="calcularBreakevenInvernada">Calculando…</span>
+                            </button>
+                            <div @class([
+                                'rp-breakeven-result',
+                                'rp-breakeven-result--invernada',
+                                'rp-breakeven-result--active' => $breakevenInvernada !== null,
+                            ])>
+                                @if($breakevenInvernada !== null)
+                                    {{ number_format($breakevenInvernada, 2, ',', '.') }}
+                                    <span class="rp-unit">$/Kg</span>
+                                @else
+                                    <span class="rp-breakeven-placeholder">—</span>
+                                @endif
+                            </div>
                         </div>
-                    </div>
-
-                    <div class="rp-breakeven-item">
-                        <button
-                            type="button"
-                            class="rp-breakeven-btn rp-breakeven-btn--gordo"
-                            wire:click="calcularBreakevenGordo"
-                            wire:loading.attr="disabled"
-                            wire:target="calcularBreakevenGordo"
-                        >
-                            <span wire:loading.remove wire:target="calcularBreakevenGordo">Breakeven Gordo</span>
-                            <span wire:loading wire:target="calcularBreakevenGordo">Calculando…</span>
-                        </button>
-                        <div @class([
-                            'rp-breakeven-result',
-                            'rp-breakeven-result--gordo',
-                            'rp-breakeven-result--active' => $breakevenGordo !== null,
-                        ])>
-                            @if($breakevenGordo !== null)
-                                {{ number_format($breakevenGordo, 2, ',', '.') }}
-                                <span class="rp-unit">$/Kg</span>
-                            @else
-                                <span class="rp-breakeven-placeholder">—</span>
-                            @endif
+    
+                        <div class="rp-breakeven-item">
+                            <button
+                                type="button"
+                                class="rp-breakeven-btn rp-breakeven-btn--gordo"
+                                wire:click="calcularBreakevenGordo"
+                                wire:loading.attr="disabled"
+                                wire:target="calcularBreakevenGordo"
+                            >
+                                <span wire:loading.remove wire:target="calcularBreakevenGordo">Breakeven Gordo</span>
+                                <span wire:loading wire:target="calcularBreakevenGordo">Calculando…</span>
+                            </button>
+                            <div @class([
+                                'rp-breakeven-result',
+                                'rp-breakeven-result--gordo',
+                                'rp-breakeven-result--active' => $breakevenGordo !== null,
+                            ])>
+                                @if($breakevenGordo !== null)
+                                    {{ number_format($breakevenGordo, 2, ',', '.') }}
+                                    <span class="rp-unit">$/Kg</span>
+                                @else
+                                    <span class="rp-breakeven-placeholder">—</span>
+                                @endif
+                            </div>
                         </div>
-                    </div>
-
-                    <div class="rp-breakeven-item rp-breakeven-item--reset">
-                        <button
-                            type="button"
-                            class="rp-breakeven-btn rp-breakeven-btn--reset"
-                            wire:click="reestablecerBreakeven"
-                            wire:loading.attr="disabled"
-                            wire:target="reestablecerBreakeven"
-                            @disabled($breakevenGordo === null && $breakevenInvernada === null)
-                        >
-                            <span wire:loading.remove wire:target="reestablecerBreakeven">Reestablecer</span>
-                            <span wire:loading wire:target="reestablecerBreakeven">Reestableciendo…</span>
-                        </button>
+    
+                        <div class="rp-breakeven-item rp-breakeven-item--reset">
+                            <button
+                                type="button"
+                                class="rp-breakeven-btn rp-breakeven-btn--reset"
+                                wire:click="reestablecerBreakeven"
+                                wire:loading.attr="disabled"
+                                wire:target="reestablecerBreakeven"
+                                @disabled($breakevenGordo === null && $breakevenInvernada === null)
+                            >
+                                <span wire:loading.remove wire:target="reestablecerBreakeven">Reestablecer</span>
+                                <span wire:loading wire:target="reestablecerBreakeven">Reestableciendo…</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
