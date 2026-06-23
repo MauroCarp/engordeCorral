@@ -6,7 +6,9 @@ use App\Models\Modelo;
 use App\Models\SanidadEstructura;
 use App\Support\ModeloDietaAnalisisCalculator;
 use App\Support\ModeloReporteCalculator;
+use App\Support\SelectedModeloResolver;
 use Illuminate\Support\Collection;
+use Livewire\Attributes\On;
 use stdClass;
 
 trait InteractsWithModeloReporteData
@@ -27,6 +29,8 @@ trait InteractsWithModeloReporteData
 
     public array $modeloOptions = [];
 
+    public int $widgetRefreshKey = 0;
+
     protected function initializeModeloReporteState(bool $loadModeloOptions = false): void
     {
         $this->sanidadEstructura = collect();
@@ -43,7 +47,7 @@ trait InteractsWithModeloReporteData
                 ->toArray();
         }
 
-        $sessionModeloId = session($this->getSelectedModeloSessionKey());
+        $sessionModeloId = session(SelectedModeloResolver::SESSION_KEY);
 
         $this->setSelectedModelo($sessionModeloId ? (int) $sessionModeloId : null, fallbackToLatest: true);
     }
@@ -61,13 +65,34 @@ trait InteractsWithModeloReporteData
         $this->selectedModeloId = $this->modelo?->id;
 
         if ($this->selectedModeloId) {
-            session([$this->getSelectedModeloSessionKey() => $this->selectedModeloId]);
+            SelectedModeloResolver::set($this->selectedModeloId);
         } else {
-            session()->forget($this->getSelectedModeloSessionKey());
+            SelectedModeloResolver::set(null);
         }
 
         $this->syncSanidadData($this->selectedModeloId);
         $this->syncDietaAnalisisData();
+    }
+
+    #[On('modeloSeleccionado')]
+    public function handleModeloSeleccionado(?int $modeloId = null): void
+    {
+        $this->refreshDashboardWidgets($modeloId);
+    }
+
+    #[On('refresh-dashboard-widgets')]
+    public function refreshDashboardWidgets(?int $modeloId = null): void
+    {
+        $this->setSelectedModelo(
+            $modeloId ?? SelectedModeloResolver::resolveId(),
+            fallbackToLatest: $modeloId === null,
+        );
+        $this->widgetRefreshKey++;
+    }
+
+    public function refreshDashboardWidget(): void
+    {
+        $this->refreshDashboardWidgets(SelectedModeloResolver::resolveId());
     }
 
     /**
@@ -103,10 +128,5 @@ trait InteractsWithModeloReporteData
     private function syncDietaAnalisisData(): void
     {
         $this->dietaAnalisis = app(ModeloDietaAnalisisCalculator::class)->calculate($this->modelo);
-    }
-
-    private function getSelectedModeloSessionKey(): string
-    {
-        return 'selected_modelo_id';
     }
 }

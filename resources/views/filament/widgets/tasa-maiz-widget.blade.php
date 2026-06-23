@@ -5,6 +5,7 @@
     @endphp
 
     <x-filament::section>
+        <x-filament.widgets.partials.dashboard-widget-shell class="tasa-maiz-root">
         <style>
             .tasa-maiz-root {
                 font-family: 'Instrument Sans', sans-serif;
@@ -111,6 +112,7 @@
         </style>
 
         <div
+            wire:key="tasa-maiz-content-{{ $widgetRefreshKey ?? 0 }}"
             class="tasa-maiz-root"
             id="{{ $widgetId }}"
             x-data="{
@@ -208,5 +210,6 @@
                 </table>
             @endif
         </div>
+        </x-filament.widgets.partials.dashboard-widget-shell>
     </x-filament::section>
 </x-filament-widgets::widget>

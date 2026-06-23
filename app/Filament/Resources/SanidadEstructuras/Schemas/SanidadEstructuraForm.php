@@ -68,4 +68,33 @@ class SanidadEstructuraForm
                     ->live(),
             ]);
     }
+
+    public static function configureCostoEdit(Schema $schema): Schema
+    {
+        return $schema
+            ->components([
+                TextInput::make('motivo')
+                    ->label('Motivo')
+                    ->disabled()
+                    ->dehydrated(false),
+
+                TextInput::make('tipo')
+                    ->label('Tipo')
+                    ->formatStateUsing(fn (?string $state): string => match ($state) {
+                        'estructura' => 'Estructura',
+                        'sanidad' => 'Sanidad',
+                        default => (string) $state,
+                    })
+                    ->disabled()
+                    ->dehydrated(false),
+
+                TextInput::make('costo_mes')
+                    ->required()
+                    ->numeric()
+                    ->inputMode('decimal')
+                    ->step(0.01)
+                    ->prefix('$')
+                    ->label(fn (Get $get) => $get('tipo') === 'estructura' ? '$/Mes' : '$/Cab'),
+            ]);
+    }
 }

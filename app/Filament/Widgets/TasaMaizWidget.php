@@ -5,7 +5,9 @@ namespace App\Filament\Widgets;
 use App\Models\Insumo;
 use App\Models\Modelo;
 use App\Models\SanidadEstructura;
+use App\Support\SelectedModeloResolver;
 use Filament\Widgets\Widget;
+use Livewire\Attributes\On;
 
 class TasaMaizWidget extends Widget
 {
@@ -35,11 +37,58 @@ class TasaMaizWidget extends Widget
         'column4' => 0.0,
     ];
 
+    public int $widgetRefreshKey = 0;
+
     public function mount(): void
     {
-        $this->modelo = Modelo::latest()->first();
+        $modeloId = SelectedModeloResolver::resolveId();
+        $this->setSelectedModelo($modeloId, fallbackToLatest: true);
+    }
 
+    #[On('modeloSeleccionado')]
+    public function handleModeloSeleccionado(?int $modeloId = null): void
+    {
+        $this->refreshDashboardWidgets($modeloId);
+    }
+
+    #[On('refresh-dashboard-widgets')]
+    public function refreshDashboardWidgets(?int $modeloId = null): void
+    {
+        $this->setSelectedModelo(
+            $modeloId ?? SelectedModeloResolver::resolveId(),
+            fallbackToLatest: $modeloId === null,
+        );
+        $this->widgetRefreshKey++;
+    }
+
+    public function refreshDashboardWidget(): void
+    {
+        $this->refreshDashboardWidgets(SelectedModeloResolver::resolveId());
+    }
+
+    private function setSelectedModelo(?int $modeloId, bool $fallbackToLatest = false): void
+    {
+        if ($modeloId) {
+            $this->modelo = Modelo::find($modeloId);
+        } elseif ($fallbackToLatest) {
+            $this->modelo = Modelo::latest()->first();
+        } else {
+            $this->modelo = null;
+        }
+
+        $this->recalculate();
+    }
+
+    private function recalculate(): void
+    {
         if (! $this->modelo) {
+            $this->rows = [];
+            $this->totals = [
+                'column2' => 0.0,
+                'column3' => 0.0,
+                'column4' => 0.0,
+            ];
+
             return;
         }
 
@@ -78,8 +127,17 @@ class TasaMaizWidget extends Widget
         $consumoTotalMs = $consumoDiario * $diasEngorde;
 
         $costoAlimento = $consumoTotalMs * (float) $modelo->precio_alimento_balanceado;
-        $costoSanidadMensual = (float) SanidadEstructura::query()->where('tipo', 'sanidad')->sum('costo_mes');
-        $costoEstructuraMensual = (float) SanidadEstructura::query()->where('tipo', 'estructura')->sum('costo_mes');
+
+        $sanidadQuery = SanidadEstructura::query()
+            ->where('modelo_id', $modelo->id);
+
+        $costoSanidadMensual = (float) (clone $sanidadQuery)
+            ->where('tipo', 'sanidad')
+            ->sum('costo_mes');
+
+        $costoEstructuraMensual = (float) (clone $sanidadQuery)
+            ->where('tipo', 'estructura')
+            ->sum('costo_mes');
 
         return [
             'costo_alimento' => $costoAlimento,

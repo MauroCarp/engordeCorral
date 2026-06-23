@@ -420,7 +420,11 @@
     }
 </style>
 
-<div class="reporte-root">
+<div class="reporte-root modelo-reporte-loading-host">
+
+    @include('filament.widgets.partials.modelo-reporte-loading', [
+        'targets' => 'selectedModeloId, updatedSelectedModeloId, calcularBreakevenGordo, calcularBreakevenInvernada, reestablecerBreakeven, refreshDashboardWidgets',
+    ])
 
     {{-- ── Header ── --}}
     <div class="rp-header">

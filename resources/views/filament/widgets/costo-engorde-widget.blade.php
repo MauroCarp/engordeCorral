@@ -1,5 +1,6 @@
 <x-filament-widgets::widget>
     <x-filament::section>
+        <x-filament.widgets.partials.dashboard-widget-shell>
         @php
             $formatMoney = static fn (float $value): string => number_format($value, 2, ',', '.');
             $formatPercent = static fn (float $value): string => number_format($value, 2, ',', '.') . '%';
@@ -127,5 +128,6 @@
                 </tfoot>
             </table>
         @endif
+        </x-filament.widgets.partials.dashboard-widget-shell>
     </x-filament::section>
 </x-filament-widgets::widget>

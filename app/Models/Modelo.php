@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Modelo extends Model
 {
@@ -49,4 +50,19 @@ class Modelo extends Model
         'tasa_anual'                   => 'decimal:4',
         'capacidad_estructura'         => 'integer',
     ];
+
+    public function sanidadEstructuras(): HasMany
+    {
+        return $this->hasMany(SanidadEstructura::class);
+    }
+
+    public function sanidadRegistros(): HasMany
+    {
+        return $this->sanidadEstructuras()->where('tipo', 'sanidad');
+    }
+
+    public function estructuraRegistros(): HasMany
+    {
+        return $this->sanidadEstructuras()->where('tipo', 'estructura');
+    }
 }

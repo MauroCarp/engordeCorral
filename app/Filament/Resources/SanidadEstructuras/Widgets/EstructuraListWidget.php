@@ -2,12 +2,12 @@
 
 namespace App\Filament\Resources\SanidadEstructuras\Widgets;
 
-use App\Models\Modelo;
+use App\Filament\Resources\SanidadEstructuras\Support\SanidadEstructuraTableActions;
 use App\Models\SanidadEstructura;
+use App\Support\SelectedModeloResolver;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
-use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
@@ -16,28 +16,23 @@ class EstructuraListWidget extends BaseWidget
 {
     protected static ?string $heading = null;
 
-    private const SELECTED_MODELO_SESSION_KEY = 'selected_modelo_id';
-
     protected int | string | array $columnSpan = 'half';
 
-    // Polling automático cada 30 segundos
     protected string | array $poll = '30s';
 
-    // Listeners para eventos de refresh
     protected $listeners = [
         '$refresh' => 'refreshWidget',
         'refreshEstructuraWidget' => 'refreshWidget',
     ];
 
-    public function refreshWidget()
+    public function refreshWidget(): void
     {
         $this->dispatch('$refresh');
     }
 
     protected function getTableHeading(): string | \Illuminate\Contracts\Support\Htmlable | null
     {
-        $modeloId = session(self::SELECTED_MODELO_SESSION_KEY);
-        $modelo = $modeloId ? Modelo::find($modeloId) : Modelo::latest()->first();
+        $modelo = SelectedModeloResolver::resolve();
 
         if (! $modelo) {
             return 'Registros de Estructura';
@@ -54,8 +49,15 @@ class EstructuraListWidget extends BaseWidget
 
     public function table(Table $table): Table
     {
+        $modeloId = SelectedModeloResolver::resolveId();
+
         return $table
-            ->query(SanidadEstructura::query()->where(['tipo' => 'estructura']))
+            ->query(
+                SanidadEstructura::query()
+                    ->where('tipo', 'estructura')
+                    ->when($modeloId, fn ($query) => $query->where('modelo_id', $modeloId))
+                    ->when(! $modeloId, fn ($query) => $query->whereRaw('1 = 0')),
+            )
             ->columns([
                 TextColumn::make('motivo')
                     ->label('Motivo')
@@ -69,13 +71,16 @@ class EstructuraListWidget extends BaseWidget
                     ->sortable()
                     ->summarize([
                         \Filament\Tables\Columns\Summarizers\Sum::make()
-                                ->prefix('$')
+                            ->prefix('$')
                             ->numeric(decimalPlaces: 0, decimalSeparator: ',', thousandsSeparator: '.')
                             ->label('Total $/Mes'),
                     ]),
-
             ])
             ->actions([
+                SanidadEstructuraTableActions::editCostoAction(
+                    'Editar costo de Estructura',
+                    fn () => $this->refreshWidget(),
+                ),
                 DeleteAction::make()
                     ->requiresConfirmation()
                     ->modalHeading('Eliminar Registro de Estructura')
@@ -96,7 +101,7 @@ class EstructuraListWidget extends BaseWidget
                 ]),
             ])
             ->emptyStateHeading('No hay registros de Estructura')
-            ->emptyStateDescription('Crea el primer registro de estructura desde el botón "Nuevo Registro".')
+            ->emptyStateDescription('Seleccione un modelo y sincronice motivos o cree un registro desde "Nuevo Registro".')
             ->paginated(false)
             ->searchable(false);
     }
