@@ -26,7 +26,10 @@ class Dashboard extends BaseDashboard
                             ->schema($this->getWidgetsSchemaComponents([
                                 \App\Filament\Widgets\ModeloReporteWidget::class,
                             ])),
-                        Grid::make(1)
+                        Grid::make([
+                            'default' => 1,
+                            'xl'=>3,
+                            ])
                             ->extraAttributes([
                                 'x-show' => 'activeTab === 1',
                                 'x-cloak' => '1',
@@ -36,32 +39,39 @@ class Dashboard extends BaseDashboard
                                 Grid::make(1)
                                     ->extraAttributes(['class' => 'dashboard-widget-group'])
                                     ->schema($this->getWidgetsSchemaComponents([
-                                        \App\Filament\Widgets\ImpactoCostosWidget::class,
                                         \App\Filament\Widgets\ImpactoCostosChartWidget::class,
+                                        \App\Filament\Widgets\ImpactoCostosWidget::class,
                                     ])),
                                 Grid::make(1)
                                     ->extraAttributes(['class' => 'dashboard-widget-group'])
                                     ->schema($this->getWidgetsSchemaComponents([
-                                        \App\Filament\Widgets\CostoEngordeWidget::class,
                                         \App\Filament\Widgets\CostoEngordeChartWidget::class,
+                                        \App\Filament\Widgets\CostoEngordeWidget::class,
                                     ])),
                                 Grid::make(1)
                                     ->extraAttributes(['class' => 'dashboard-widget-group'])
                                     ->schema($this->getWidgetsSchemaComponents([
-                                        \App\Filament\Widgets\EstructuraCostoWidget::class,
                                         \App\Filament\Widgets\EstructuraCostoChartWidget::class,
+                                        \App\Filament\Widgets\EstructuraCostoWidget::class,
                                     ])),
                             ]),
-                        Grid::make(1)
+                        Grid::make([
+                            'default' => 1,
+                            'xl'=>1,
+                            ])
                             ->extraAttributes([
                                 'x-show' => 'activeTab === 2',
                                 'x-cloak' => '1',
                                 'class' => 'dashboard-tabs__panel',
                             ])
-                            ->schema($this->getWidgetsSchemaComponents([
-                                \App\Filament\Widgets\TasaMaizWidget::class,
-                                \App\Filament\Widgets\SensibilidadPreciosWidget::class,
-                            ])),
+                            ->schema([
+                                Grid::make(2)
+                                ->extraAttributes(['class' => 'dashboard-widget-group'])
+                                ->schema($this->getWidgetsSchemaComponents([
+                                    \App\Filament\Widgets\TasaMaizWidget::class,
+                                    \App\Filament\Widgets\SensibilidadPreciosWidget::class,
+                                ]))
+                            ]),
                     ]),
             ]);
     }

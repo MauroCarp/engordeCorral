@@ -13,7 +13,7 @@ class TasaMaizWidget extends Widget
 {
     protected string $view = 'filament.widgets.tasa-maiz-widget';
 
-    protected int | string | array $columnSpan = 'full';
+    protected int | string | array $columnSpan = 'half';
 
     protected static ?int $sort = 4;
 
