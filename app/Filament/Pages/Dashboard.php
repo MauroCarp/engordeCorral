@@ -4,6 +4,7 @@ namespace App\Filament\Pages;
 
 use Filament\Pages\Dashboard as BaseDashboard;
 use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\View;
 use Filament\Schemas\Schema;
 
 class Dashboard extends BaseDashboard
@@ -13,30 +14,55 @@ class Dashboard extends BaseDashboard
         return $schema
             ->components([
                 ...(method_exists($this, 'getFiltersForm') ? [$this->getFiltersFormContentComponent()] : []),
-                Grid::make([
-                    'default' => 1,
-                    'xl' => 2,
-                ])
+                View::make('filament.pages.dashboard-tabs')
+                    ->columnSpanFull()
                     ->schema([
                         Grid::make(1)
+                            ->extraAttributes([
+                                'x-show' => 'activeTab === 0',
+                                'x-cloak' => '1',
+                                'class' => 'dashboard-tabs__panel',
+                            ])
                             ->schema($this->getWidgetsSchemaComponents([
                                 \App\Filament\Widgets\ModeloReporteWidget::class,
                             ])),
                         Grid::make(1)
+                            ->extraAttributes([
+                                'x-show' => 'activeTab === 1',
+                                'x-cloak' => '1',
+                                'class' => 'dashboard-tabs__panel',
+                            ])
+                            ->schema([
+                                Grid::make(1)
+                                    ->extraAttributes(['class' => 'dashboard-widget-group'])
+                                    ->schema($this->getWidgetsSchemaComponents([
+                                        \App\Filament\Widgets\ImpactoCostosWidget::class,
+                                        \App\Filament\Widgets\ImpactoCostosChartWidget::class,
+                                    ])),
+                                Grid::make(1)
+                                    ->extraAttributes(['class' => 'dashboard-widget-group'])
+                                    ->schema($this->getWidgetsSchemaComponents([
+                                        \App\Filament\Widgets\CostoEngordeWidget::class,
+                                        \App\Filament\Widgets\CostoEngordeChartWidget::class,
+                                    ])),
+                                Grid::make(1)
+                                    ->extraAttributes(['class' => 'dashboard-widget-group'])
+                                    ->schema($this->getWidgetsSchemaComponents([
+                                        \App\Filament\Widgets\EstructuraCostoWidget::class,
+                                        \App\Filament\Widgets\EstructuraCostoChartWidget::class,
+                                    ])),
+                            ]),
+                        Grid::make(1)
+                            ->extraAttributes([
+                                'x-show' => 'activeTab === 2',
+                                'x-cloak' => '1',
+                                'class' => 'dashboard-tabs__panel',
+                            ])
                             ->schema($this->getWidgetsSchemaComponents([
-                                \App\Filament\Widgets\ImpactoCostosWidget::class,
-                                \App\Filament\Widgets\ImpactoCostosChartWidget::class,
-                                \App\Filament\Widgets\CostoEngordeWidget::class,
-                                \App\Filament\Widgets\CostoEngordeChartWidget::class,
-                                \App\Filament\Widgets\EstructuraCostoWidget::class,
-                                \App\Filament\Widgets\EstructuraCostoChartWidget::class,
                                 \App\Filament\Widgets\TasaMaizWidget::class,
+                                \App\Filament\Widgets\SensibilidadPreciosWidget::class,
                             ])),
                     ]),
-                Grid::make(1)
-                    ->schema($this->getWidgetsSchemaComponents([
-                        \App\Filament\Widgets\SensibilidadPreciosWidget::class,
-                    ])),
             ]);
     }
 
@@ -45,10 +71,7 @@ class Dashboard extends BaseDashboard
      */
     public function getColumns(): int | array
     {
-        return [
-            'default' => 1,
-            'xl' => 2,
-        ];
+        return 1;
     }
 
     /**
@@ -58,13 +81,14 @@ class Dashboard extends BaseDashboard
     {
         return [
             \App\Filament\Widgets\ModeloReporteWidget::class,
-            \App\Filament\Widgets\SensibilidadPreciosWidget::class,
             \App\Filament\Widgets\ImpactoCostosWidget::class,
             \App\Filament\Widgets\ImpactoCostosChartWidget::class,
             \App\Filament\Widgets\CostoEngordeWidget::class,
             \App\Filament\Widgets\CostoEngordeChartWidget::class,
+            \App\Filament\Widgets\EstructuraCostoWidget::class,
             \App\Filament\Widgets\EstructuraCostoChartWidget::class,
             \App\Filament\Widgets\TasaMaizWidget::class,
+            \App\Filament\Widgets\SensibilidadPreciosWidget::class,
         ];
     }
 }
