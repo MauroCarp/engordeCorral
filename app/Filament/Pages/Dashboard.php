@@ -9,6 +9,11 @@ use Filament\Schemas\Schema;
 
 class Dashboard extends BaseDashboard
 {
+    public function getTitle(): string
+    {
+        return '';
+    }
+
     public function content(Schema $schema): Schema
     {
         return $schema
