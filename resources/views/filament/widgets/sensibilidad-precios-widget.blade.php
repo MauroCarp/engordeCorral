@@ -192,7 +192,8 @@
                             {{-- precio gordo sube = favorable = verde ▲ --}}
                             <span class="sp-arr-green">▲</span>
                             <input type="number"
-                                   wire:model.live.debounce.600ms="colPcts.{{ $ci }}"
+                                   wire:model.change="colPcts.{{ $ci }}"
+                                   wire:change="$refresh"
                                    class="sp-pct-input"
                                    step="1" min="-99" max="99">
                             <span class="sp-pct-unit">%</span>
@@ -200,7 +201,8 @@
                             {{-- precio gordo baja = desfavorable = rojo ▼ --}}
                             <span class="sp-arr-red">▼</span>
                             <input type="number"
-                                   wire:model.live.debounce.600ms="colPcts.{{ $ci }}"
+                                   wire:model.change="colPcts.{{ $ci }}"
+                                   wire:change="$refresh"
                                    class="sp-pct-input"
                                    step="1" min="-99" max="99">
                             <span class="sp-pct-unit">%</span>
@@ -240,7 +242,8 @@
                         {{-- invernada más cara = desfavorable = rojo ▲ --}}
                         <span class="sp-arr-red">▲</span>
                         <input type="number"
-                               wire:model.live.debounce.600ms="rowPcts.{{ $ri }}"
+                               wire:model.change="rowPcts.{{ $ri }}"
+                               wire:change="$refresh"
                                class="sp-pct-input"
                                step="1" min="-99" max="99">
                         <span class="sp-pct-unit">%</span>
@@ -248,7 +251,8 @@
                         {{-- invernada más barata = favorable = verde ▼ --}}
                         <span class="sp-arr-green">▼</span>
                         <input type="number"
-                               wire:model.live.debounce.600ms="rowPcts.{{ $ri }}"
+                               wire:model.change="rowPcts.{{ $ri }}"
+                               wire:change="$refresh"
                                class="sp-pct-input"
                                step="1" min="-99" max="99">
                         <span class="sp-pct-unit">%</span>
