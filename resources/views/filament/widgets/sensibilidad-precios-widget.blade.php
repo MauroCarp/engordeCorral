@@ -160,6 +160,23 @@
 .sp-arr-red   { color: #ef4444; font-size: 0.9em; }
 .sp-arr-eq    { color: #60a5fa; font-size: 1.1em; font-weight: 700; }
 
+.sp-arr-eq-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 24px;
+    border: 1px solid rgba(96, 165, 250, 0.45);
+    border-radius: 4px;
+    background: rgba(96, 165, 250, 0.08);
+    cursor: pointer;
+}
+
+.sp-arr-eq-button:hover {
+    background: rgba(96, 165, 250, 0.16);
+    border-color: #60a5fa;
+}
+
 .sp-pct-unit  { font-size: 0.68rem; color: var(--c-muted); margin-left: 1px; }
 </style>
 
@@ -187,7 +204,26 @@
                     <th class="sp-pct-header">
                         @php $fpct = (float) $pct; @endphp
                         @if($fpct == 0)
-                            <span class="sp-arr-eq">=</span>
+                            <div x-data="{ editing: false }" style="display:inline-flex;align-items:center;gap:2px;">
+                                <button
+                                    x-show="! editing"
+                                    type="button"
+                                    class="sp-arr-eq sp-arr-eq-button"
+                                    x-on:click="editing = true; $nextTick(() => $refs.input.focus())"
+                                    title="Editar porcentaje"
+                                >=</button>
+                                <input
+                                    x-show="editing"
+                                    x-ref="input"
+                                    type="number"
+                                    wire:model.change="colPcts.{{ $ci }}"
+                                    wire:change="$refresh"
+                                    class="sp-pct-input"
+                                    step="1" min="-99" max="99"
+                                    x-on:blur="editing = false"
+                                >
+                                <span x-show="editing" class="sp-pct-unit">%</span>
+                            </div>
                         @elseif($fpct > 0)
                             {{-- precio gordo sube = favorable = verde ▲ --}}
                             <span class="sp-arr-green">▲</span>
@@ -237,7 +273,26 @@
                 {{-- Input de porcentaje de fila --}}
                 <td class="sp-row-pct">
                     @if($fRowPct == 0)
-                        <span class="sp-arr-eq">=</span>
+                        <div x-data="{ editing: false }" style="display:inline-flex;align-items:center;gap:2px;">
+                            <button
+                                x-show="! editing"
+                                type="button"
+                                class="sp-arr-eq sp-arr-eq-button"
+                                x-on:click="editing = true; $nextTick(() => $refs.input.focus())"
+                                title="Editar porcentaje"
+                            >=</button>
+                            <input
+                                x-show="editing"
+                                x-ref="input"
+                                type="number"
+                                wire:model.change="rowPcts.{{ $ri }}"
+                                wire:change="$refresh"
+                                class="sp-pct-input"
+                                step="1" min="-99" max="99"
+                                x-on:blur="editing = false"
+                            >
+                            <span x-show="editing" class="sp-pct-unit">%</span>
+                        </div>
                     @elseif($fRowPct > 0)
                         {{-- invernada más cara = desfavorable = rojo ▲ --}}
                         <span class="sp-arr-red">▲</span>
