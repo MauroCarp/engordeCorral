@@ -33,12 +33,12 @@ class Dashboard extends BaseDashboard
                             ])),
                         Grid::make([
                             'default' => 1,
-                            'xl'=>3,
+                            'xl'=>4,
                             ])
                             ->extraAttributes([
                                 'x-show' => 'activeTab === 1',
                                 'x-cloak' => '1',
-                                'class' => 'dashboard-tabs__panel',
+                                'class' => 'dashboard-tabs__panel dashboard-costs-grid',
                             ])
                             ->schema([
                                 Grid::make(1)
@@ -52,7 +52,11 @@ class Dashboard extends BaseDashboard
                                     ->schema($this->getWidgetsSchemaComponents([
                                         \App\Filament\Widgets\CostoEngordeChartWidget::class,
                                         \App\Filament\Widgets\CostoEngordeWidget::class,
-                                    ])),
+                                    ]))
+                                    ->columnSpan([
+                                        'default' => 1,
+                                        'xl' => 2,
+                                    ]),
                                 Grid::make(1)
                                     ->extraAttributes(['class' => 'dashboard-widget-group'])
                                     ->schema($this->getWidgetsSchemaComponents([
