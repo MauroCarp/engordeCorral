@@ -169,6 +169,10 @@
         grid-column: 1 / -1;
     } */
 
+    .rp-grid-span-2 {
+        grid-column: span 2;
+    }
+
     /* ── Section card ────────────────────────────────────── */
     .rp-section {
         background: var(--c-surface);
@@ -301,6 +305,7 @@
     /* ── Responsive ──────────────────────────────────────── */
     @media (max-width: 900px) {
         .rp-grid        { grid-template-columns: 1fr; }
+        .rp-grid-span-2 { grid-column: auto; }
         .rp-nested      { grid-template-columns: 1fr; }
         .rp-section-body.cols-3 { grid-template-columns: 1fr 1fr; }
         .rp-header      { flex-direction: column; }
@@ -778,7 +783,7 @@
         </div>
 
         {{-- Financiero --}}
-        <div class="rp-section">
+        <div class="rp-section rp-grid-span-2">
             <div class="rp-section-header">
                 <span class="rp-section-icon icon-green">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
